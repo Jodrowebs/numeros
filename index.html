@@ -3,578 +3,517 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marcador de Negocios Sin Web</title>
+<title>Negocios Sin Web — Marcador</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0f172a;--surface:#1e293b;--border:#334155;
-  --accent:#6366f1;--accent2:#7c3aed;
+  --bg:#0f172a;--s:#1e293b;--b:#334155;
+  --acc:#6366f1;--acc2:#7c3aed;
   --green:#10b981;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;
   --text:#f1f5f9;--muted:#94a3b8;--faint:#475569;
 }
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 
-/* ── HEADER ── */
-.header{background:linear-gradient(135deg,#1e3a8a,#4c1d95);padding:20px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.header h1{font-size:1.3rem;font-weight:800;flex:1}
-.header p{color:#bfdbfe;font-size:.8rem;width:100%}
+/* HEADER */
+header{background:linear-gradient(135deg,#1e3a8a,#4c1d95);padding:18px 24px 16px}
+header h1{font-size:1.25rem;font-weight:800}
+header p{color:#bfdbfe;font-size:.78rem;margin-top:3px}
 
-/* ── LAYOUT ── */
-.layout{display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 70px)}
-@media(max-width:700px){.layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}}
+/* SEARCH BAR */
+.search-wrap{padding:16px;background:#0c1425;border-bottom:1px solid var(--b)}
+.search-box{display:flex;gap:8px;max-width:800px;margin:0 auto}
+.search-inp{flex:1;background:var(--s);border:2px solid var(--b);border-radius:12px;padding:14px 18px;color:var(--text);font-size:1rem;transition:border .15s}
+.search-inp:focus{outline:none;border-color:var(--acc)}
+.search-inp::placeholder{color:var(--faint)}
+.search-btn{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;border-radius:12px;padding:14px 22px;cursor:pointer;font-size:.95rem;font-weight:700;transition:all .15s;white-space:nowrap}
+.search-btn:hover{opacity:.9;transform:translateY(-1px)}
+.search-btn:disabled{background:var(--b);color:var(--faint);transform:none;cursor:not-allowed}
 
-/* ── SIDEBAR ── */
-.sidebar{background:#0c1425;border-right:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.search-examples{max-width:800px;margin:8px auto 0;display:flex;gap:6px;flex-wrap:wrap}
+.ex{background:var(--bg);border:1px solid var(--b);border-radius:20px;padding:4px 12px;font-size:.72rem;color:var(--muted);cursor:pointer;transition:all .15s}
+.ex:hover{border-color:var(--acc);color:#a5b4fc}
 
-.label{font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px;font-weight:600}
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:1fr 360px;flex:1;overflow:hidden;min-height:0}
+@media(max-width:720px){.layout{grid-template-columns:1fr;overflow:visible}}
 
-.inp{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:.9rem;transition:border .15s}
-.inp:focus{outline:none;border-color:var(--accent)}
-.inp::placeholder{color:var(--faint)}
+/* LEFT: CALL PANEL */
+.call-area{display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--b)}
 
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:.75rem;cursor:pointer;transition:all .15s;user-select:none}
-.chip:hover{border-color:var(--accent)}
-.chip.on{background:#312e81;border-color:var(--accent);color:#a5b4fc;font-weight:600}
+.stats-bar{display:flex;border-bottom:1px solid var(--b);flex-shrink:0}
+.sp{flex:1;padding:10px 8px;text-align:center;background:var(--s)}
+.sp .n{font-size:1.2rem;font-weight:800}
+.sp .l{font-size:.62rem;text-transform:uppercase;color:var(--muted);letter-spacing:.3px}
+.ng{color:var(--green)}.ny{color:var(--yellow)}.nr{color:var(--red)}.nb{color:var(--blue)}
 
-.range-row{display:flex;align-items:center;gap:10px}
-.range-row input[type=range]{flex:1;accent-color:var(--accent)}
-.range-val{color:#a5b4fc;font-weight:700;font-size:.85rem;min-width:45px;text-align:right}
+.prog-bar-wrap{background:var(--bg);border-bottom:1px solid var(--b);padding:7px 16px;display:flex;align-items:center;gap:10px;font-size:.72rem;color:var(--muted);flex-shrink:0}
+.prog-track{flex:1;background:var(--b);border-radius:4px;height:5px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:4px;transition:width .3s}
 
-.btn{border:none;border-radius:10px;padding:13px;cursor:pointer;font-size:.9rem;font-weight:700;transition:all .15s;width:100%}
-.btn-search{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
-.btn-search:hover{opacity:.9;transform:translateY(-1px)}
-.btn-search:disabled{background:var(--border);color:var(--faint);transform:none;cursor:not-allowed}
+.cur-call{padding:20px;flex-shrink:0;background:#0c1425;border-bottom:1px solid var(--b)}
+.cc-num{font-size:.7rem;color:var(--muted);margin-bottom:6px}
+.cc-name{font-size:1.35rem;font-weight:800;line-height:1.2}
+.cc-addr{color:var(--muted);font-size:.8rem;margin-top:4px}
+.cc-badge{display:inline-flex;align-items:center;gap:5px;background:#2e1065;color:#a5b4fc;font-size:.7rem;padding:3px 10px;border-radius:20px;margin:8px 0 12px}
+.cc-phone{font-size:2rem;font-weight:900;letter-spacing:1px;margin-bottom:16px}
+.cc-phone a{color:var(--green);text-decoration:none}
+.cc-phone a:hover{text-decoration:underline}
 
-.api-row{display:flex;gap:8px}
-.api-row .inp{border-radius:8px;padding:9px 12px;font-size:.82rem}
-.api-row button{background:var(--surface);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:9px 12px;cursor:pointer;font-size:.75rem;white-space:nowrap;transition:all .15s}
-.api-row button:hover{border-color:var(--accent);color:#a5b4fc}
+.act-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px}
+.a{border:none;border-radius:10px;padding:11px 6px;cursor:pointer;font-size:.73rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all .15s}
+.a .i{font-size:1.2rem}
+.a:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.a1{background:#065f46;color:#6ee7b7}
+.a2{background:#78350f;color:#fcd34d}
+.a3{background:#7f1d1d;color:#fca5a5}
+.a4{background:var(--s);color:var(--muted);border:1px solid var(--b)}
 
-.api-hint{font-size:.72rem;color:var(--faint);line-height:1.6}
-.api-hint a{color:#60a5fa}
+.notes-row{display:flex;gap:7px;margin-top:10px}
+.notes-inp{flex:1;background:var(--s);border:1px solid var(--b);border-radius:8px;padding:8px 11px;color:var(--text);font-size:.8rem;resize:none}
+.notes-inp:focus{outline:none;border-color:var(--acc)}
+.maps-link{background:var(--s);border:1px solid var(--b);border-radius:8px;padding:8px 10px;color:var(--muted);text-decoration:none;font-size:.7rem;display:flex;flex-direction:column;align-items:center;gap:2px;transition:all .15s;white-space:nowrap}
+.maps-link:hover{border-color:var(--acc);color:#a5b4fc}
 
-.key-ok{color:var(--green);font-size:.75rem;margin-top:4px}
+/* RIGHT: LIST */
+.list-area{display:flex;flex-direction:column;overflow:hidden}
+.list-top{padding:10px 12px;border-bottom:1px solid var(--b);background:var(--s);display:flex;flex-direction:column;gap:7px;flex-shrink:0}
+.list-search{background:var(--bg);border:1px solid var(--b);border-radius:7px;padding:7px 10px;color:var(--text);font-size:.78rem;width:100%}
+.list-search:focus{outline:none;border-color:var(--acc)}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{background:var(--bg);border:1px solid var(--b);border-radius:6px;padding:4px 9px;font-size:.7rem;cursor:pointer;color:var(--muted);transition:all .15s}
+.tab.on{background:#312e81;border-color:var(--acc);color:#a5b4fc;font-weight:700}
 
-/* ── MAIN PANEL ── */
-.main{display:flex;flex-direction:column;overflow:hidden}
+.list-scroll{flex:1;overflow-y:auto;padding:8px}
+.list-scroll::-webkit-scrollbar{width:3px}
+.list-scroll::-webkit-scrollbar-thumb{background:var(--b);border-radius:4px}
 
-/* STATS TOP */
-.stats-top{display:flex;gap:1px;background:var(--border);border-bottom:1px solid var(--border);flex-shrink:0}
-.stat-pill{flex:1;background:var(--surface);padding:10px;text-align:center}
-.stat-pill .num{font-size:1.3rem;font-weight:800}
-.stat-pill .lbl{font-size:.65rem;text-transform:uppercase;color:var(--muted);letter-spacing:.3px}
-.num-green{color:var(--green)}
-.num-yellow{color:var(--yellow)}
-.num-red{color:var(--red)}
-.num-blue{color:var(--blue)}
-
-/* CURRENT CALL CARD */
-.call-panel{padding:20px;border-bottom:1px solid var(--border);flex-shrink:0;background:#0c1425}
-.call-panel.hidden{display:none}
-
-.call-number{font-size:.72rem;color:var(--muted);margin-bottom:8px}
-.call-name{font-size:1.4rem;font-weight:800;line-height:1.2;margin-bottom:4px}
-.call-addr{color:var(--muted);font-size:.82rem;margin-bottom:4px}
-.call-type-badge{display:inline-block;background:#2e1065;color:#a5b4fc;font-size:.7rem;padding:3px 10px;border-radius:20px;margin-bottom:14px}
-.call-phone{font-size:2rem;font-weight:900;color:var(--green);letter-spacing:1px;margin-bottom:16px}
-.call-phone a{color:inherit;text-decoration:none}
-.call-phone a:hover{text-decoration:underline}
-
-.action-btns{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
-.act-btn{border:none;border-radius:10px;padding:12px 8px;cursor:pointer;font-size:.78rem;font-weight:700;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:4px}
-.act-btn .ico{font-size:1.3rem}
-.act-btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
-.act-interested{background:#065f46;color:#6ee7b7}
-.act-callback{background:#78350f;color:#fcd34d}
-.act-no{background:#7f1d1d;color:#fca5a5}
-.act-skip{background:var(--surface);color:var(--muted);border:1px solid var(--border)}
-
-.notes-row{display:flex;gap:8px;margin-top:10px}
-.notes-inp{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:.82rem;resize:none}
-.notes-inp:focus{outline:none;border-color:var(--accent)}
-
-/* CALL LIST */
-.list-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;background:var(--surface)}
-.list-header input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:7px 11px;color:var(--text);font-size:.8rem}
-.list-header input:focus{outline:none;border-color:var(--accent)}
-.filter-tabs{display:flex;gap:4px}
-.ftab{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:.72rem;cursor:pointer;color:var(--muted);transition:all .15s}
-.ftab.on{background:#312e81;border-color:var(--accent);color:#a5b4fc}
-
-.list-scroll{flex:1;overflow-y:auto;padding:10px 12px}
-.list-scroll::-webkit-scrollbar{width:4px}
-.list-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-
-.list-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:background .12s;border:1px solid transparent;margin-bottom:5px}
-.list-item:hover{background:var(--surface);border-color:var(--border)}
-.list-item.active{background:#1e1b4b;border-color:var(--accent)}
-.li-index{font-size:.7rem;color:var(--faint);min-width:22px;text-align:right;flex-shrink:0}
-.li-dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0}
-.dot-pending{background:var(--border)}
-.dot-interested{background:var(--green)}
-.dot-callback{background:var(--yellow)}
-.dot-no{background:var(--red)}
-.dot-skip{background:var(--faint)}
+.li{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:9px;cursor:pointer;border:1px solid transparent;margin-bottom:4px;transition:all .12s}
+.li:hover{background:var(--s);border-color:var(--b)}
+.li.cur{background:#1e1b4b;border-color:var(--acc)}
+.li-n{font-size:.66rem;color:var(--faint);min-width:20px;text-align:right}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dp{background:var(--b)}.di{background:var(--green)}.dc{background:var(--yellow)}.dn{background:var(--red)}.ds{background:var(--faint)}
 .li-info{flex:1;min-width:0}
-.li-name{font-size:.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.li-sub{font-size:.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.li-phone{font-size:.72rem;color:var(--green);flex-shrink:0}
+.li-nm{font-size:.82rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li-ad{font-size:.68rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li-ph{font-size:.68rem;color:var(--green);flex-shrink:0}
 
-/* LOADING / EMPTY */
-.center-msg{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:var(--faint);gap:12px;text-align:center;padding:40px}
-.center-msg .ico{font-size:3rem}
-.center-msg p{font-size:.88rem;line-height:1.7;max-width:280px}
-.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+.bottom-bar{padding:8px 12px;border-top:1px solid var(--b);background:var(--s);display:flex;gap:6px;flex-shrink:0}
+.bb-btn{background:var(--bg);border:1px solid var(--b);color:var(--muted);border-radius:7px;padding:6px 10px;font-size:.7rem;cursor:pointer;transition:all .15s}
+.bb-btn:hover{border-color:var(--acc);color:#a5b4fc}
+
+/* CENTER/LOADING */
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px;color:var(--faint);text-align:center;padding:40px;grid-column:1/-1}
+.center .ico{font-size:3.5rem}
+.center p{font-size:.88rem;line-height:1.8;max-width:340px;color:var(--muted)}
+.center strong{color:var(--text)}
+.spinner{width:36px;height:36px;border:3px solid var(--b);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.load-msg{font-size:.82rem;color:var(--muted);text-align:center}
+.load-step{font-size:.82rem;color:var(--muted);margin-top:4px}
+.load-detail{font-size:.72rem;color:var(--faint)}
 
-/* EXPORT */
-.bottom-bar{padding:10px 16px;border-top:1px solid var(--border);background:var(--surface);display:flex;gap:8px;flex-shrink:0}
-.bottom-bar button{background:var(--bg);border:1px solid var(--border);color:var(--muted);border-radius:7px;padding:7px 12px;font-size:.75rem;cursor:pointer;transition:all .15s}
-.bottom-bar button:hover{border-color:var(--accent);color:#a5b4fc}
-
-.progress-mini{display:flex;align-items:center;gap:8px;padding:8px 16px;background:#0c1425;border-bottom:1px solid var(--border);font-size:.75rem;color:var(--muted)}
-.progress-mini .bar{flex:1;background:var(--border);border-radius:4px;height:4px;overflow:hidden}
-.progress-mini .fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s}
+/* RADIUS HINT */
+.radius-chips{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.rc2{background:var(--s);border:1px solid var(--b);border-radius:6px;padding:3px 9px;font-size:.7rem;cursor:pointer;color:var(--muted);transition:all .15s}
+.rc2.on{border-color:var(--acc);color:#a5b4fc;background:#1e1b4b}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div>
-    <h1>📞 Marcador — Negocios Sin Web</h1>
-    <p>Busca una zona · Obtén hasta 100 negocios sin web con teléfono · Llama uno a uno</p>
+<header>
+  <h1>📞 Negocios Sin Web — Marcador de Llamadas</h1>
+  <p>Gratis · Sin registro · Datos de OpenStreetMap · Escribe la zona y listo</p>
+</header>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <input class="search-inp" id="q" placeholder="Ej: restaurantes en Malasaña Madrid · peluquerías Gracia Barcelona · bares Triana Sevilla"
+      onkeydown="if(event.key==='Enter')buscar()">
+    <button class="search-btn" id="btn" onclick="buscar()">🔍 Buscar</button>
+  </div>
+  <div class="search-examples">
+    <span style="font-size:.7rem;color:var(--faint);align-self:center">Ejemplos:</span>
+    <div class="ex" onclick="setQ('restaurantes en Malasaña Madrid')">🍽️ Malasaña Madrid</div>
+    <div class="ex" onclick="setQ('peluquerías en Gracia Barcelona')">✂️ Gracia Barcelona</div>
+    <div class="ex" onclick="setQ('bares en Triana Sevilla')">🍺 Triana Sevilla</div>
+    <div class="ex" onclick="setQ('talleres en Vallecas Madrid')">🚗 Vallecas Madrid</div>
+    <div class="ex" onclick="setQ('gimnasios en Valencia centro')">💪 Valencia centro</div>
+    <div class="ex" onclick="setQ('cafeterías en el Born Barcelona')">☕ El Born BCN</div>
+    <div class="ex" onclick="setQ('hoteles en Palma de Mallorca')">🏨 Palma Mallorca</div>
+  </div>
+  <div class="radius-chips" style="max-width:800px;margin:8px auto 0">
+    <span style="font-size:.7rem;color:var(--faint);align-self:center">Radio:</span>
+    <div class="rc2 on" id="r300" onclick="setR(300)">300m</div>
+    <div class="rc2" id="r500" onclick="setR(500)">500m</div>
+    <div class="rc2" id="r1000" onclick="setR(1000)">1 km</div>
+    <div class="rc2" id="r2000" onclick="setR(2000)">2 km</div>
+    <div class="rc2" id="r5000" onclick="setR(5000)">5 km</div>
   </div>
 </div>
 
-<div class="layout">
-
-  <!-- ── SIDEBAR ── -->
-  <div class="sidebar">
-
-    <div>
-      <div class="label">🔑 API Key de Google Maps</div>
-      <div class="api-row">
-        <input class="inp" type="password" id="apiKey" placeholder="AIza...">
-        <button onclick="saveKey()">💾 Guardar</button>
-      </div>
-      <div id="keyOk"></div>
-      <div class="api-hint" style="margin-top:6px">
-        Activa <strong>Places API</strong> en
-        <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a>
-      </div>
-    </div>
-
-    <div style="border-top:1px solid var(--border);padding-top:14px">
-      <div class="label">📍 Zona de búsqueda</div>
-      <input class="inp" id="zone" placeholder="Ej: Madrid centro, Gracia Barcelona, Triana Sevilla..." />
-    </div>
-
-    <div>
-      <div class="label">🏷️ Tipo de negocio</div>
-      <div class="chips" id="catChips"></div>
-    </div>
-
-    <div>
-      <div class="label">📏 Radio de búsqueda</div>
-      <div class="range-row">
-        <input type="range" id="radius" min="500" max="5000" step="500" value="1500" oninput="updateRadius()">
-        <span class="val-label range-val" id="radiusLbl">1.5 km</span>
-      </div>
-    </div>
-
-    <div>
-      <div class="label">🔢 Máximo de resultados</div>
-      <select class="inp" id="maxResults">
-        <option value="20">20 negocios</option>
-        <option value="50">50 negocios</option>
-        <option value="100" selected>100 negocios</option>
-        <option value="200">200 negocios</option>
-      </select>
-    </div>
-
-    <button class="btn btn-search" id="searchBtn" onclick="doSearch()">
-      🔎 Buscar negocios sin web
-    </button>
-
-    <div style="border-top:1px solid var(--border);padding-top:10px;font-size:.75rem;color:var(--faint);line-height:1.8">
-      <strong style="color:var(--muted)">Cómo usar:</strong><br>
-      1. Guarda tu API Key<br>
-      2. Escribe la zona (barrio, ciudad...)<br>
-      3. Elige categoría y radio<br>
-      4. Pulsa Buscar<br>
-      5. Llama y marca cada resultado
-    </div>
-
+<div class="layout" id="layout">
+  <div class="center" id="emptyState">
+    <div class="ico">📞</div>
+    <p>
+      <strong>Escribe qué buscas y dónde.</strong><br><br>
+      Detecta automáticamente el tipo de negocio. Solo necesitas escribir algo como:<br>
+      <em>"restaurantes en Malasaña"</em> o <em>"peluquerías Gracia Barcelona"</em>
+    </p>
   </div>
-
-  <!-- ── MAIN ── -->
-  <div class="main" id="mainPanel">
-
-    <!-- Estado inicial -->
-    <div class="center-msg" id="emptyState">
-      <div class="ico">📞</div>
-      <p>Configura la búsqueda en el panel izquierdo y pulsa <strong>Buscar</strong> para obtener tu lista de llamadas.</p>
-    </div>
-
-  </div>
-
 </div>
 
 <script>
-const CATS = [
-  {k:'restaurant',l:'🍽️ Restaurantes'},
-  {k:'cafe',l:'☕ Cafeterías'},
-  {k:'bar',l:'🍺 Bares'},
-  {k:'lodging',l:'🏨 Hoteles'},
-  {k:'hair_care',l:'✂️ Peluquerías'},
-  {k:'gym',l:'💪 Gimnasios'},
-  {k:'beauty_salon',l:'💅 Estética'},
-  {k:'car_repair',l:'🚗 Talleres'},
-  {k:'dentist',l:'🦷 Dentistas'},
-  {k:'pharmacy',l:'💊 Farmacias'},
-  {k:'bakery',l:'🥐 Panaderías'},
-  {k:'clothing_store',l:'👗 Tiendas ropa'},
-  {k:'electrician',l:'⚡ Electricistas'},
-  {k:'plumber',l:'🔧 Fontaneros'},
-  {k:'laundry',l:'🧺 Lavanderías'},
-  {k:'supermarket',l:'🛒 Supermercados'},
+// ── CATEGORÍAS ─────────────────────────────────────────────────────
+// Mapeo de palabras → tags de OpenStreetMap
+const CAT_MAP = [
+  {words:['restaurant','restaurante','restaurantes','comida','gastronom'],  tags:[{k:'amenity',v:'restaurant'}], label:'Restaurante'},
+  {words:['bar','bares','taberna','taverna','pub','pubs','cervecería','cerveceria'], tags:[{k:'amenity',v:'bar'},{k:'amenity',v:'pub'}], label:'Bar/Pub'},
+  {words:['café','cafe','cafetería','cafeteria','cafeterías','cafeterias','coffee'], tags:[{k:'amenity',v:'cafe'}], label:'Cafetería'},
+  {words:['hotel','hoteles','hostal','hostales','pensión','pension','alojamiento','hospedaje'], tags:[{k:'tourism',v:'hotel'},{k:'tourism',v:'hostel'},{k:'tourism',v:'guest_house'}], label:'Hotel'},
+  {words:['peluquería','peluqueria','peluquerías','peluquerias','barbería','barberia','barbero','barbería'], tags:[{k:'shop',v:'hairdresser'},{k:'shop',v:'barber'}], label:'Peluquería'},
+  {words:['gimnasio','gimnasios','gym','gyms','fitness','crossfit'], tags:[{k:'leisure',v:'fitness_centre'},{k:'amenity',v:'gym'}], label:'Gimnasio'},
+  {words:['estética','estetica','esteticas','estetique','belleza','spa','uñas','unas','manicura'], tags:[{k:'shop',v:'beauty'}], label:'Estética'},
+  {words:['taller','talleres','mecánico','mecanico','mecánicos','mecanicos','coches','automovil'], tags:[{k:'shop',v:'car_repair'}], label:'Taller mecánico'},
+  {words:['dentista','dentistas','dental','odontolog'], tags:[{k:'amenity',v:'dentist'}], label:'Dentista'},
+  {words:['farmacia','farmacias','parafarmacia'], tags:[{k:'amenity',v:'pharmacy'}], label:'Farmacia'},
+  {words:['lavandería','lavanderia','lavanderías','lavanderias','tintorería','tintoreria'], tags:[{k:'shop',v:'laundry'},{k:'shop',v:'dry_cleaning'}], label:'Lavandería'},
+  {words:['panadería','panaderia','panaderías','panaderias','panadero','bakery','horno'], tags:[{k:'shop',v:'bakery'}], label:'Panadería'},
+  {words:['supermercado','supermercados','super','alimentación','alimentacion','frutería','fruteria','verdulería'], tags:[{k:'shop',v:'supermarket'},{k:'shop',v:'greengrocer'},{k:'shop',v:'convenience'}], label:'Alimentación'},
+  {words:['ropa','ropas','moda','boutique','tienda ropa','tiendas ropa','textil'], tags:[{k:'shop',v:'clothes'}], label:'Tienda de ropa'},
+  {words:['electricist','electricista','electricistas','eléctric','electric'], tags:[{k:'craft',v:'electrician'}], label:'Electricista'},
+  {words:['fontanero','fontaneros','plomero','plomeros','fontanería','fontaneria'], tags:[{k:'craft',v:'plumber'}], label:'Fontanero'},
+  {words:['pizzería','pizzeria','pizza','pizzas'], tags:[{k:'amenity',v:'fast_food'},{k:'amenity',v:'restaurant'}], label:'Pizzería'},
+  {words:['veterinario','veterinaria','veterinarios','vet','clínica veterinaria'], tags:[{k:'amenity',v:'veterinary'}], label:'Veterinario'},
+  {words:['clínica','clinica','médico','medico','médicos','consulta'], tags:[{k:'amenity',v:'clinic'},{k:'amenity',v:'doctors'}], label:'Clínica/Médico'},
+  {words:['joyería','joyeria','joyerías','joyerias','relojería','relojeria'], tags:[{k:'shop',v:'jewelry'}], label:'Joyería'},
+  {words:['librería','libreria','librerias','papelería','papeleria'], tags:[{k:'shop',v:'books'},{k:'shop',v:'stationery'}], label:'Librería'},
+  {words:['farmacia veterinaria'], tags:[{k:'shop',v:'agrarian'}], label:'Tienda agrícola'},
+  {words:['negocio','negocios','empresa','empresas','comercio','comercios','local','locales','tienda','tiendas'], tags:[{k:'shop',v:'convenience'}], label:'Comercio'},
 ];
-const TYPE_MAP = Object.fromEntries(CATS.map(c=>[c.k, c.l.replace(/^\S+ /,'')]));
 
-let apiKey = localStorage.getItem('gkey')||'';
-let selectedCat = 'restaurant';
-let calls = [];      // lista de negocios
-let currentIdx = 0;
-let filterTab = 'all';
-let filterQ = '';
+// Fallback: si no detecta categoría, usa esto
+const DEFAULT_TAGS = [{k:'amenity',v:'restaurant'}];
+const DEFAULT_LABEL = 'Negocio';
 
-// ── INIT ──────────────────────────────────────────────────────────
-(()=>{
-  if(apiKey){
-    document.getElementById('apiKey').value = apiKey;
-    document.getElementById('keyOk').innerHTML = '<div class="key-ok">✅ API Key guardada</div>';
+// ── ESTADO ─────────────────────────────────────────────────────────
+let calls = [];
+let curIdx = 0;
+let ftab = 'all';
+let fq = '';
+let searchRadius = 300;
+
+// ── UI HELPERS ─────────────────────────────────────────────────────
+function setQ(v){ document.getElementById('q').value=v; }
+function setR(v){
+  searchRadius=v;
+  ['300','500','1000','2000','5000'].forEach(r=>{
+    const el=document.getElementById('r'+r);
+    if(el) el.classList.toggle('on', parseInt(r)===v);
+  });
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+
+// ── DETECCIÓN DE CATEGORÍA ─────────────────────────────────────────
+function detectCat(text){
+  const t = text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  for(const cat of CAT_MAP){
+    for(const w of cat.words){
+      const wn = w.normalize('NFD').replace(/[̀-ͯ]/g,'');
+      if(t.includes(wn)) return cat;
+    }
   }
-  renderChips();
-  updateRadius();
-})();
-
-function saveKey(){
-  const k = document.getElementById('apiKey').value.trim();
-  if(!k) return alert('Pega tu API Key primero');
-  apiKey = k;
-  localStorage.setItem('gkey', k);
-  document.getElementById('keyOk').innerHTML = '<div class="key-ok">✅ Guardada correctamente</div>';
+  return null;
 }
 
-// ── CHIPS ─────────────────────────────────────────────────────────
-function renderChips(){
-  document.getElementById('catChips').innerHTML = CATS.map(c=>`
-    <div class="chip ${c.k===selectedCat?'on':''}" onclick="selectCat('${c.k}',this)">${c.l}</div>
-  `).join('');
-}
-function selectCat(k, el){
-  selectedCat = k;
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
-  el.classList.add('on');
-}
-function updateRadius(){
-  const v = document.getElementById('radius').value;
-  document.getElementById('radiusLbl').textContent = (v/1000).toFixed(1).replace('.0','')+' km';
-}
+// ── BÚSQUEDA ──────────────────────────────────────────────────────
+async function buscar(){
+  const raw = document.getElementById('q').value.trim();
+  if(!raw) return alert('Escribe qué buscas y dónde. Ej: "restaurantes en Malasaña Madrid"');
 
-// ── SEARCH ────────────────────────────────────────────────────────
-async function doSearch(){
-  if(!apiKey) return alert('Guarda primero tu API Key de Google Maps');
-  const zone = document.getElementById('zone').value.trim();
-  if(!zone) return alert('Escribe una zona (ej: "Madrid centro")');
+  const btn = document.getElementById('btn');
+  btn.disabled=true; btn.textContent='⏳ Buscando...';
 
-  const btn = document.getElementById('searchBtn');
-  btn.disabled = true; btn.textContent = '⏳ Buscando...';
-
-  setMain(`
-    <div class="center-msg">
+  setLayout(`
+    <div class="center">
       <div class="spinner"></div>
-      <div class="load-msg" id="loadMsg">Localizando la zona...</div>
+      <div class="load-step" id="ls">Analizando búsqueda...</div>
+      <div class="load-detail" id="ld"></div>
     </div>
   `);
 
   try {
-    // 1. Geocode the zone
-    const coords = await geocode(zone);
-    setLoadMsg(`Buscando negocios en ${zone}...`);
+    // 1. Detectar categoría
+    const cat = detectCat(raw);
+    const tags = cat ? cat.tags : DEFAULT_TAGS;
+    const label = cat ? cat.label : DEFAULT_LABEL;
+    setLS(`Buscando ${label.toLowerCase()} en "${raw}"...`);
 
-    // 2. Nearby search with pagination
-    const radius = document.getElementById('radius').value;
-    const maxN = parseInt(document.getElementById('maxResults').value);
-    const places = await fetchPlaces(coords.lat, coords.lng, selectedCat, radius, maxN);
+    // 2. Geocodificar zona con Nominatim (gratis, sin key)
+    // Quitar palabras de categoría para obtener solo la zona
+    const zoneText = limpiarZona(raw);
+    setLD(`Localizando: "${zoneText}"`);
+    const coords = await geocodeNominatim(zoneText);
+    setLS(`Encontrado en ${coords.display}. Buscando negocios...`);
+    setLD(`Radio: ${searchRadius}m · Categoría: ${label}`);
 
-    if(!places.length){ setMain(`<div class="center-msg"><div class="ico">😔</div><p>No se encontraron negocios de este tipo en la zona.<br>Prueba con un radio mayor o diferente categoría.</p></div>`); return; }
+    // 3. Overpass API query
+    const places = await overpassQuery(coords.lat, coords.lon, tags, searchRadius);
+    setLS(`Procesando ${places.length} resultados...`);
+    setLD('Filtrando los que no tienen web y tienen teléfono...');
 
-    setLoadMsg(`Verificando ${places.length} negocios (buscando los que no tienen web)...`);
-
-    // 3. Get details & filter no-website
+    // 4. Filtrar: sin web, con teléfono
     calls = [];
-    let checked = 0;
     for(const p of places){
-      setLoadMsg(`Verificando ${++checked}/${places.length}... (sin web encontrados: ${calls.length})`);
-      const d = await placeDetails(p.place_id);
-      if(!d.website && (d.formatted_phone_number || d.international_phone_number)){
-        calls.push({
-          id: p.place_id,
-          name: d.name||p.name,
-          address: d.formatted_address||p.vicinity||'',
-          phone: d.formatted_phone_number||d.international_phone_number||'',
-          types: d.types||p.types||[],
-          rating: d.rating||p.rating||0,
-          reviews: d.user_ratings_total||0,
-          mapsUrl: d.url||'',
-          status: 'pending',  // pending | interested | callback | no | skip
-          notes: ''
-        });
-        if(calls.length >= maxN) break;
-      }
-      await sleep(50);
+      const t = p.tags||{};
+      const name = t.name||t['name:es']||'Sin nombre';
+      const phone = normalizePhone(t.phone||t['contact:phone']||t['phone:es']||'');
+      const website = t.website||t['contact:website']||t.url||'';
+      if(website || !phone) continue; // skip si tiene web o no tiene teléfono
+
+      const addr = buildAddr(t);
+      const typeLabel = label;
+      const mapsUrl = `https://www.openstreetmap.org/${p.type}/${p.id}`;
+      calls.push({
+        id: `${p.type}/${p.id}`,
+        name, phone, address: addr,
+        typeLabel, mapsUrl,
+        status:'pending', notes:''
+      });
     }
 
     if(!calls.length){
-      setMain(`<div class="center-msg"><div class="ico">🎉</div><p>¡Todos los negocios encontrados ya tienen web!<br>Prueba otra categoría o zona.</p></div>`);
+      setLayout(`
+        <div class="center">
+          <div class="ico">😔</div>
+          <p>No se encontraron <strong>${label.toLowerCase()}</strong> sin web y con teléfono en esta zona.<br><br>
+          Prueba con un <strong>radio mayor</strong>, otra <strong>categoría</strong> o una zona diferente.</p>
+        </div>
+      `);
       return;
     }
 
-    currentIdx = 0;
-    filterTab = 'all'; filterQ = '';
-    renderMain();
+    curIdx=0; ftab='all'; fq='';
+    renderAll();
 
   } catch(e){
-    setMain(`<div class="center-msg"><div class="ico">❌</div><p><strong>Error:</strong> ${e.message}</p></div>`);
+    setLayout(`
+      <div class="center">
+        <div class="ico">❌</div>
+        <p><strong>Error:</strong> ${esc(e.message)}<br><br>
+        Comprueba que la zona exista. Ej: "restaurantes en Malasaña Madrid"</p>
+      </div>
+    `);
   } finally {
-    btn.disabled = false; btn.textContent = '🔎 Buscar negocios sin web';
+    btn.disabled=false; btn.textContent='🔍 Buscar';
   }
 }
 
-// ── API CALLS ─────────────────────────────────────────────────────
-async function geocode(q){
-  const r = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(q+' España')}&key=${apiKey}`);
+function limpiarZona(text){
+  // Quitar palabras de categoría para quedarnos con la ubicación
+  let z = text;
+  // Quitar palabras de categoría conocidas
+  const catWords = CAT_MAP.flatMap(c=>c.words).sort((a,b)=>b.length-a.length);
+  for(const w of catWords){
+    const re = new RegExp('\\b'+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'s?\\b','gi');
+    z = z.replace(re,'');
+  }
+  // Quitar preposiciones sueltas al principio
+  z = z.replace(/^\s*(en|de|del|la|las|los|el|a|cerca de|por)\s+/i,'').trim();
+  z = z.replace(/\s{2,}/g,' ').trim();
+  if(z.length < 3) z = text; // fallback
+  return z + ' España';
+}
+
+// ── GEOCODING (Nominatim — gratis) ────────────────────────────────
+async function geocodeNominatim(q){
+  const url=`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=es&accept-language=es`;
+  const r = await fetch(url, {headers:{'User-Agent':'NegocionSinWeb/1.0'}});
+  if(!r.ok) throw new Error('Error de red al buscar la zona');
   const d = await r.json();
-  if(d.status==='REQUEST_DENIED') throw new Error('API Key inválida o Geocoding API no activada');
-  if(d.status!=='OK') throw new Error('No se encontró la zona: '+q);
-  return d.results[0].geometry.location;
+  if(!d.length) throw new Error(`No encontré la zona "${q}". Sé más específico: "calle Gran Vía Madrid" o "barrio Salamanca Madrid"`);
+  return {lat:parseFloat(d[0].lat), lon:parseFloat(d[0].lon), display: d[0].display_name.split(',').slice(0,2).join(',')};
 }
 
-async function fetchPlaces(lat, lng, type, radius, maxN){
-  let all=[], token=null, page=0;
-  do {
-    let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&key=${apiKey}`;
-    if(token) url += '&pagetoken='+token;
-    const r = await fetch(url);
-    const d = await r.json();
-    if(d.status==='REQUEST_DENIED') throw new Error('API Key inválida o Places API no activada');
-    if(d.status!=='OK' && d.status!=='ZERO_RESULTS') throw new Error('Places API: '+d.status);
-    all.push(...(d.results||[]));
-    token = d.next_page_token||null;
-    page++;
-    if(token && all.length < maxN*2) await sleep(2100);
-  } while(token && page<3 && all.length < maxN*2);
-  return all.slice(0, maxN*2); // fetch extra since we'll filter
+// ── OVERPASS API (gratis, sin key) ────────────────────────────────
+async function overpassQuery(lat, lon, tags, radius){
+  // Construir query para múltiples tags (OR)
+  const around=`(around:${radius},${lat},${lon})`;
+  let parts=[];
+  for(const tag of tags){
+    parts.push(`node["${tag.k}"="${tag.v}"]${around};`);
+    parts.push(`way["${tag.k}"="${tag.v}"]${around};`);
+  }
+  const q=`[out:json][timeout:25];(${parts.join('')});out center 200;`;
+  const r=await fetch('https://overpass-api.de/api/interpreter',{
+    method:'POST',
+    body:'data='+encodeURIComponent(q),
+    headers:{'Content-Type':'application/x-www-form-urlencoded'}
+  });
+  if(!r.ok) throw new Error('Error en Overpass API: '+r.status);
+  const d=await r.json();
+  return d.elements||[];
 }
 
-async function placeDetails(pid){
-  const fields='name,formatted_phone_number,international_phone_number,website,formatted_address,rating,user_ratings_total,types,url';
-  const r = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${pid}&fields=${fields}&key=${apiKey}`);
-  const d = await r.json();
-  return d.result||{};
+// ── HELPERS DE DATOS ───────────────────────────────────────────────
+function normalizePhone(p){
+  if(!p) return '';
+  p = p.trim().replace(/\s+/g,' ');
+  // Eliminar números claramente inválidos
+  if(p.replace(/\D/g,'').length < 7) return '';
+  return p;
 }
 
-function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+function buildAddr(t){
+  const parts=[];
+  if(t['addr:street']){
+    let line=t['addr:street'];
+    if(t['addr:housenumber']) line+=' '+t['addr:housenumber'];
+    parts.push(line);
+  }
+  if(t['addr:city']||t['addr:town']||t['addr:village'])
+    parts.push(t['addr:city']||t['addr:town']||t['addr:village']);
+  if(t['addr:postcode']) parts.push(t['addr:postcode']);
+  return parts.join(', ') || '';
+}
 
-// ── RENDER MAIN ───────────────────────────────────────────────────
-function renderMain(){
-  const stats = getStats();
-  const cur = calls[currentIdx];
-  const filtered = getFiltered();
+// ── RENDER ────────────────────────────────────────────────────────
+function renderAll(){
+  const stats=getStats();
+  const cur=calls[curIdx];
+  const filtered=getFiltered();
 
-  const html = `
-    <!-- Stats -->
-    <div class="stats-top">
-      <div class="stat-pill"><div class="num">${calls.length}</div><div class="lbl">Total</div></div>
-      <div class="stat-pill"><div class="num num-green">${stats.interested}</div><div class="lbl">Interesados</div></div>
-      <div class="stat-pill"><div class="num num-yellow">${stats.callback}</div><div class="lbl">Rellamar</div></div>
-      <div class="stat-pill"><div class="num num-red">${stats.no}</div><div class="lbl">No</div></div>
-      <div class="stat-pill"><div class="num num-blue">${stats.pending}</div><div class="lbl">Pendientes</div></div>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-mini">
-      <span>${stats.done}/${calls.length} llamadas</span>
-      <div class="bar"><div class="fill" style="width:${Math.round(stats.done/calls.length*100)}%"></div></div>
-      <span>${Math.round(stats.done/calls.length*100)}%</span>
-    </div>
-
-    <!-- Current call -->
-    <div class="call-panel" id="callPanel">
-      ${cur ? renderCallCard(cur) : '<div style="padding:10px;color:var(--muted);font-size:.85rem">✅ Todos los contactos procesados</div>'}
-    </div>
-
-    <!-- List -->
-    <div class="list-header">
-      <input placeholder="🔍 Filtrar..." oninput="filterQ=this.value;renderList()" value="${filterQ}">
-      <div class="filter-tabs">
-        ${['all','pending','interested','callback','no'].map(t=>`
-          <div class="ftab ${filterTab===t?'on':''}" onclick="filterTab='${t}';renderList()">${
-            t==='all'?'Todos':t==='pending'?'⏳':t==='interested'?'✅':t==='callback'?'🔄':'❌'
-          }</div>
-        `).join('')}
+  const html=`
+    <div class="call-area">
+      <div class="stats-bar">
+        <div class="sp"><div class="n">${calls.length}</div><div class="l">Total</div></div>
+        <div class="sp"><div class="n ng">${stats.interested}</div><div class="l">Interesados</div></div>
+        <div class="sp"><div class="n ny">${stats.callback}</div><div class="l">Rellamar</div></div>
+        <div class="sp"><div class="n nr">${stats.no}</div><div class="l">No</div></div>
+        <div class="sp"><div class="n nb">${stats.pending}</div><div class="l">Pendientes</div></div>
+      </div>
+      <div class="prog-bar-wrap">
+        <span>${stats.done}/${calls.length}</span>
+        <div class="prog-track"><div class="prog-fill" style="width:${calls.length?Math.round(stats.done/calls.length*100):0}%"></div></div>
+        <span>${calls.length?Math.round(stats.done/calls.length*100):0}%</span>
+      </div>
+      <div class="cur-call">
+        ${cur ? callCard(cur) : '<div style="padding:10px;color:var(--muted);font-size:.85rem">✅ Todos procesados</div>'}
       </div>
     </div>
-    <div class="list-scroll" id="listScroll">
-      ${renderListItems(filtered)}
-    </div>
-
-    <!-- Bottom bar -->
-    <div class="bottom-bar">
-      <button onclick="exportCSV()">⬇️ Exportar CSV</button>
-      <button onclick="exportInterested()">⬇️ Solo interesados</button>
-      <button onclick="if(confirm('¿Nueva búsqueda?'))location.reload()">🔄 Nueva búsqueda</button>
+    <div class="list-area">
+      <div class="list-top">
+        <input class="list-search" placeholder="🔍 Filtrar por nombre o teléfono..." oninput="fq=this.value;renderList()" value="${esc(fq)}">
+        <div class="tabs">
+          ${[['all','Todos'],['pending','⏳ Pend.'],['interested','✅ Interes.'],['callback','🔄 Rellamar'],['no','❌ No']].map(([k,l])=>
+            `<div class="tab ${ftab===k?'on':''}" onclick="ftab='${k}';renderList()">${l}</div>`
+          ).join('')}
+        </div>
+      </div>
+      <div class="list-scroll" id="listScroll">${listHTML(filtered)}</div>
+      <div class="bottom-bar">
+        <button class="bb-btn" onclick="exportCSV()">⬇️ CSV completo</button>
+        <button class="bb-btn" onclick="exportCSV(calls.filter(c=>c.status==='interested'))">⬇️ Solo interesados</button>
+      </div>
     </div>
   `;
-  setMain(html);
+  setLayout(html);
 }
 
-function renderCallCard(c){
-  const typeLabel = c.types.map(t=>TYPE_MAP[t]).filter(Boolean)[0]||'Negocio';
-  const stars = c.rating ? '⭐'.repeat(Math.round(c.rating)) : '';
+function callCard(c){
   return `
-    <div class="call-number">#${currentIdx+1} de ${calls.length} · ${typeLabel}</div>
-    <div class="call-name">${esc(c.name)}</div>
-    <div class="call-addr">📍 ${esc(c.address)}</div>
-    ${stars?`<div style="font-size:.8rem;color:var(--muted);margin-bottom:6px">${stars} ${c.rating} (${c.reviews} reseñas)</div>`:''}
-    <div class="call-type-badge">${typeLabel}</div>
-    <div class="call-phone"><a href="tel:${c.phone.replace(/\s/g,'')}">${esc(c.phone)}</a></div>
-    <div class="action-btns">
-      <button class="act-btn act-interested" onclick="mark('interested')">
-        <span class="ico">✅</span>Interesado
-      </button>
-      <button class="act-btn act-callback" onclick="mark('callback')">
-        <span class="ico">🔄</span>Rellamar
-      </button>
-      <button class="act-btn act-no" onclick="mark('no')">
-        <span class="ico">❌</span>No interesa
-      </button>
-      <button class="act-btn act-skip" onclick="mark('skip')">
-        <span class="ico">⏭️</span>Saltar
-      </button>
+    <div class="cc-num">#${curIdx+1} de ${calls.length}</div>
+    <div class="cc-name">${esc(c.name)}</div>
+    <div class="cc-addr">📍 ${esc(c.address)||'Sin dirección registrada'}</div>
+    <div class="cc-badge">${esc(c.typeLabel)}</div>
+    <div class="cc-phone"><a href="tel:${esc(c.phone.replace(/\s/g,''))}">${esc(c.phone)}</a></div>
+    <div class="act-grid">
+      <button class="a a1" onclick="mark('interested')"><span class="i">✅</span>Interesado</button>
+      <button class="a a2" onclick="mark('callback')"><span class="i">🔄</span>Rellamar</button>
+      <button class="a a3" onclick="mark('no')"><span class="i">❌</span>No interesa</button>
+      <button class="a a4" onclick="mark('skip')"><span class="i">⏭️</span>Saltar</button>
     </div>
     <div class="notes-row">
-      <textarea class="notes-inp" rows="2" placeholder="Notas (nombre del contacto, qué dijo...)"
-        onchange="calls[${currentIdx}].notes=this.value">${esc(c.notes)}</textarea>
-      <a href="${c.mapsUrl||'#'}" target="_blank" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;font-size:.75rem;white-space:nowrap;transition:all .15s"
-         onmouseover="this.style.color='#a5b4fc'" onmouseout="this.style.color=''">
-        🗺️<br>Maps
-      </a>
+      <textarea class="notes-inp" rows="2" placeholder="Notas: nombre del contacto, qué dijo..."
+        onchange="calls[${curIdx}].notes=this.value">${esc(c.notes)}</textarea>
+      <a class="maps-link" href="${esc(c.mapsUrl)}" target="_blank">🗺️<br>OSM</a>
     </div>
   `;
 }
 
-function renderListItems(list){
-  if(!list.length) return '<div style="text-align:center;color:var(--faint);padding:30px;font-size:.82rem">Sin resultados</div>';
-  return list.map((c,i)=>{
-    const realIdx = calls.indexOf(c);
+function listHTML(list){
+  if(!list.length) return '<div style="text-align:center;color:var(--faint);padding:30px;font-size:.78rem">Sin resultados</div>';
+  return list.map(c=>{
+    const i=calls.indexOf(c);
+    const dc={'pending':'dp','interested':'di','callback':'dc','no':'dn','skip':'ds'}[c.status]||'dp';
     return `
-      <div class="list-item ${realIdx===currentIdx?'active':''}" onclick="jumpTo(${realIdx})">
-        <span class="li-index">${realIdx+1}</span>
-        <span class="li-dot dot-${c.status}"></span>
+      <div class="li ${i===curIdx?'cur':''}" onclick="jumpTo(${i})">
+        <span class="li-n">${i+1}</span>
+        <span class="dot ${dc}"></span>
         <div class="li-info">
-          <div class="li-name">${esc(c.name)}</div>
-          <div class="li-sub">${esc(c.address)}</div>
+          <div class="li-nm">${esc(c.name)}</div>
+          <div class="li-ad">${esc(c.address)||c.typeLabel}</div>
         </div>
-        <span class="li-phone">${esc(c.phone)}</span>
+        <span class="li-ph">${esc(c.phone)}</span>
       </div>
     `;
   }).join('');
 }
 
 function renderList(){
-  const el = document.getElementById('listScroll');
-  if(el) el.innerHTML = renderListItems(getFiltered());
-  // update call panel if visible
-  const panel = document.getElementById('callPanel');
-  if(panel && calls[currentIdx]){
-    // update active class in list
-    document.querySelectorAll('.list-item').forEach((el,i)=>{
-      el.classList.toggle('active', calls.indexOf(getFiltered()[i])===currentIdx);
-    });
-  }
+  const el=document.getElementById('listScroll');
+  if(el) el.innerHTML=listHTML(getFiltered());
 }
 
-// ── ACTIONS ───────────────────────────────────────────────────────
-function mark(status){
-  if(!calls[currentIdx]) return;
-  calls[currentIdx].status = status;
-  // auto-advance to next pending
-  const nextPending = findNextPending(currentIdx+1);
-  if(nextPending !== -1) currentIdx = nextPending;
-  renderMain();
-  // scroll active into view
-  setTimeout(()=>{
-    const active = document.querySelector('.list-item.active');
-    if(active) active.scrollIntoView({block:'nearest'});
-  }, 50);
+// ── ACCIONES ──────────────────────────────────────────────────────
+function mark(st){
+  if(!calls[curIdx]) return;
+  calls[curIdx].status=st;
+  const next=findNext(curIdx+1);
+  if(next!==-1) curIdx=next;
+  renderAll();
+  setTimeout(()=>document.querySelector('.li.cur')?.scrollIntoView({block:'nearest'}),50);
 }
 
-function jumpTo(idx){
-  currentIdx = idx;
-  renderMain();
+function jumpTo(i){ curIdx=i; renderAll(); }
+
+function findNext(from){
+  for(let i=from;i<calls.length;i++) if(calls[i].status==='pending') return i;
+  for(let i=0;i<from;i++) if(calls[i].status==='pending') return i;
+  return from<calls.length?from:calls.length-1;
 }
 
-function findNextPending(from){
-  for(let i=from; i<calls.length; i++) if(calls[i].status==='pending') return i;
-  for(let i=0; i<from; i++) if(calls[i].status==='pending') return i;
-  return from < calls.length ? from : calls.length-1;
-}
-
-// ── HELPERS ───────────────────────────────────────────────────────
 function getStats(){
-  const s = {pending:0,interested:0,callback:0,no:0,skip:0,done:0};
-  calls.forEach(c=>{ s[c.status]=(s[c.status]||0)+1; });
-  s.done = calls.length - s.pending;
+  const s={pending:0,interested:0,callback:0,no:0,skip:0,done:0};
+  calls.forEach(c=>s[c.status]=(s[c.status]||0)+1);
+  s.done=calls.length-s.pending;
   return s;
 }
 
 function getFiltered(){
   return calls.filter(c=>{
-    if(filterTab!=='all' && c.status!==filterTab) return false;
-    if(filterQ){
-      const q = filterQ.toLowerCase();
-      return c.name.toLowerCase().includes(q)||c.address.toLowerCase().includes(q)||c.phone.includes(q);
-    }
+    if(ftab!=='all'&&c.status!==ftab) return false;
+    if(fq){const q=fq.toLowerCase();return c.name.toLowerCase().includes(q)||c.phone.includes(q)||c.address.toLowerCase().includes(q);}
     return true;
   });
 }
 
-function setMain(html){ document.getElementById('mainPanel').innerHTML = html; }
-function setLoadMsg(m){ const el=document.getElementById('loadMsg'); if(el) el.textContent=m; }
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+// ── LAYOUT ────────────────────────────────────────────────────────
+function setLayout(html){document.getElementById('layout').innerHTML=html}
+function setLS(t){const e=document.getElementById('ls');if(e)e.textContent=t}
+function setLD(t){const e=document.getElementById('ld');if(e)e.textContent=t}
 
 // ── EXPORT ────────────────────────────────────────────────────────
 function exportCSV(list){
-  const data = list || calls;
-  if(!data.length) return alert('No hay resultados');
-  const rows=[['Nombre','Teléfono','Dirección','Tipo','Estado','Notas','Valoración','Google Maps']];
-  data.forEach(c=>{
-    const t = c.types.map(x=>TYPE_MAP[x]).filter(Boolean)[0]||'';
-    rows.push([c.name,c.phone,c.address,t,c.status,c.notes,c.rating||'',c.mapsUrl||'']);
-  });
+  const data=list||calls;
+  if(!data.length) return alert('Sin resultados para exportar');
+  const rows=[['Nombre','Teléfono','Dirección','Tipo','Estado','Notas','OpenStreetMap']];
+  data.forEach(c=>rows.push([c.name,c.phone,c.address,c.typeLabel,c.status,c.notes,c.mapsUrl]));
   const csv=rows.map(r=>r.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'}));
   a.download=`llamadas_${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
-}
-
-function exportInterested(){
-  exportCSV(calls.filter(c=>c.status==='interested'));
 }
 </script>
 </body>
