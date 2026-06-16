@@ -325,36 +325,56 @@ function limpiarZona(text){
   return z + ' España';
 }
 
-// ── GEOCODING (Photon por Komoot — gratis, sin CORS) ──────────────
+// ── GEOCODING — 3 servicios con fallback automático ──────────────
 async function geocodeNominatim(q){
-  // Photon: geocodificador open-source sin bloqueos CORS
-  const url=`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=5&lang=es`;
-  let r, d;
+  // Quitar "España" si ya lo añadimos, para que Open-Meteo no se confunda
+  const qClean = q.replace(/\s*españa\s*$/i,'').trim();
+
+  // 1) Open-Meteo Geocoding (sin key, CORS perfecto)
   try {
-    r = await fetch(url);
-    if(!r.ok) throw new Error('http '+r.status);
-    d = await r.json();
-  } catch(e) {
-    throw new Error('No se pudo conectar al servidor de geocodificación. Comprueba tu conexión a internet.');
-  }
-  const features = (d.features||[]);
-  // Preferir resultados en España
-  const esFirst = features.sort((a,b)=>{
-    const aEs = (a.properties?.country||'').toLowerCase().includes('españa')||
-                (a.properties?.country||'').toLowerCase()==='spain'?-1:1;
-    const bEs = (b.properties?.country||'').toLowerCase().includes('españa')||
-                (b.properties?.country||'').toLowerCase()==='spain'?-1:1;
-    return aEs-bEs;
-  });
-  if(!esFirst.length) throw new Error(`No encontré "${q}". Prueba con más detalle: "barrio Salamanca Madrid" o "calle Fuencarral Madrid"`);
-  const f = esFirst[0];
-  const p = f.properties||{};
-  const display = [p.name, p.city||p.town||p.village, p.state].filter(Boolean).join(', ');
-  return {
-    lat: f.geometry.coordinates[1],
-    lon: f.geometry.coordinates[0],
-    display
-  };
+    const url=`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(qClean)}&count=10&language=es&format=json`;
+    const r=await fetch(url);
+    if(r.ok){
+      const d=await r.json();
+      const results=(d.results||[]);
+      // Filtrar España (country_code ES) y ordenar
+      const es=results.filter(x=>x.country_code==='ES');
+      const hit=es[0]||results[0];
+      if(hit) return {lat:hit.latitude, lon:hit.longitude, display:`${hit.name}, ${hit.admin1||hit.country||''}`};
+    }
+  }catch(e){}
+
+  // 2) Photon (Komoot)
+  try{
+    const url=`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=5&lang=es`;
+    const r=await fetch(url);
+    if(r.ok){
+      const d=await r.json();
+      const feats=(d.features||[]).sort((a,b)=>{
+        const aEs=(a.properties?.country||'').toLowerCase().includes('spa')?-1:1;
+        const bEs=(b.properties?.country||'').toLowerCase().includes('spa')?-1:1;
+        return aEs-bEs;
+      });
+      if(feats.length){
+        const f=feats[0]; const p=f.properties||{};
+        return {lat:f.geometry.coordinates[1], lon:f.geometry.coordinates[0],
+                display:[p.name,p.city||p.town,p.state].filter(Boolean).join(', ')};
+      }
+    }
+  }catch(e){}
+
+  // 3) Nominatim (último recurso)
+  try{
+    const url=`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=3&countrycodes=es&accept-language=es`;
+    const r=await fetch(url,{headers:{'Accept':'application/json'}});
+    if(r.ok){
+      const d=await r.json();
+      if(d.length) return {lat:parseFloat(d[0].lat), lon:parseFloat(d[0].lon),
+                           display:d[0].display_name.split(',').slice(0,2).join(',')};
+    }
+  }catch(e){}
+
+  throw new Error(`No encontré la zona "${qClean}". Prueba siendo más específico: "Gran Vía Madrid" o "barrio Gracia Barcelona".`);
 }
 
 // ── OVERPASS API (gratis, sin key, varios servidores) ────────────
