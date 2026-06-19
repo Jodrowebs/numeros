@@ -3,229 +3,488 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Negocios Sin Web — Marcador</title>
+<title>LeadPro — CRM de Captación para Agencias Web</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0f172a;--s:#1e293b;--b:#334155;
-  --acc:#6366f1;--acc2:#7c3aed;
-  --green:#10b981;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;
+  --bg:#0f172a;--s:#1e293b;--b:#334155;--b2:#475569;
+  --acc:#6366f1;--acc2:#7c3aed;--acc3:#a78bfa;
+  --green:#10b981;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;--orange:#f97316;--pink:#ec4899;
   --text:#f1f5f9;--muted:#94a3b8;--faint:#475569;
+  --card:#1e293b;--nav:#0c1425;
 }
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-/* HEADER */
-header{background:linear-gradient(135deg,#1e3a8a,#4c1d95);padding:18px 24px 16px}
-header h1{font-size:1.25rem;font-weight:800}
-header p{color:#bfdbfe;font-size:.78rem;margin-top:3px}
+/* ── NAV ── */
+nav{background:var(--nav);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 20px;height:56px;flex-shrink:0;gap:4px;z-index:100}
+.logo{font-size:1.1rem;font-weight:900;background:linear-gradient(135deg,#6366f1,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-right:20px;white-space:nowrap}
+.logo span{font-size:.65rem;font-weight:600;-webkit-text-fill-color:var(--muted);display:block;margin-top:-2px}
+.nav-tab{padding:8px 14px;border-radius:8px;cursor:pointer;font-size:.82rem;font-weight:600;color:var(--muted);transition:all .15s;border:none;background:none;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.nav-tab:hover{color:var(--text);background:var(--s)}
+.nav-tab.on{color:#a5b4fc;background:#1e1b4b;border:1px solid #312e81}
+.nav-tab .badge{background:var(--acc);color:#fff;font-size:.6rem;padding:1px 5px;border-radius:10px;font-weight:700}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.nav-kpi{font-size:.72rem;color:var(--muted);padding:4px 10px;background:var(--s);border-radius:6px;border:1px solid var(--b)}
+.nav-kpi strong{color:var(--green)}
 
-/* SEARCH BAR */
-.search-wrap{padding:16px;background:#0c1425;border-bottom:1px solid var(--b)}
-.search-box{display:flex;gap:8px;max-width:800px;margin:0 auto}
-.search-inp{flex:1;background:var(--s);border:2px solid var(--b);border-radius:12px;padding:14px 18px;color:var(--text);font-size:1rem;transition:border .15s}
+/* ── MAIN CONTENT ── */
+main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.view{display:none;flex:1;overflow:hidden}
+.view.on{display:flex;flex-direction:column}
+
+/* ── SCROLLABLE AREA ── */
+.scroll{flex:1;overflow-y:auto;padding:20px}
+.scroll::-webkit-scrollbar{width:4px}
+.scroll::-webkit-scrollbar-thumb{background:var(--b);border-radius:4px}
+
+/* ── DASHBOARD ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:20px}
+.kpi{background:var(--card);border:1px solid var(--b);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:50%;opacity:.1;transform:translate(20px,-20px)}
+.kpi.green::before{background:var(--green)}.kpi.blue::before{background:var(--blue)}
+.kpi.yellow::before{background:var(--yellow)}.kpi.purple::before{background:var(--acc)}
+.kpi.red::before{background:var(--red)}.kpi.orange::before{background:var(--orange)}
+.kpi .ico{font-size:1.4rem;margin-bottom:8px}
+.kpi .val{font-size:2rem;font-weight:900;line-height:1}
+.kpi .lbl{font-size:.72rem;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+.kpi .sub{font-size:.7rem;color:var(--faint);margin-top:6px}
+.kpi.green .val{color:var(--green)}.kpi.blue .val{color:var(--blue)}
+.kpi.yellow .val{color:var(--yellow)}.kpi.purple .val{color:var(--acc3)}
+.kpi.red .val{color:var(--red)}.kpi.orange .val{color:var(--orange)}
+
+.section-title{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--b)}
+
+/* mini pipeline bar */
+.pipe-summary{display:flex;border-radius:10px;overflow:hidden;height:32px;margin-bottom:20px}
+.ps{flex:1;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;cursor:pointer;transition:filter .15s;min-width:0;overflow:hidden}
+.ps:hover{filter:brightness(1.2)}
+.ps.s0{background:#334155;color:#94a3b8}
+.ps.s1{background:#1e3a8a;color:#93c5fd}
+.ps.s2{background:#1e40af;color:#bfdbfe}
+.ps.s3{background:#15803d;color:#86efac}
+.ps.s4{background:#92400e;color:#fcd34d}
+.ps.s5{background:#7c2d12;color:#fdba74}
+.ps.s6{background:#14532d;color:#4ade80}
+.ps.s7{background:#312e81;color:#a5b4fc}
+
+/* recent activity */
+.activity-list{display:flex;flex-direction:column;gap:8px}
+.act-item{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:.8rem}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* revenue calc */
+.rev-calc{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:20px}
+.rev-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--b);font-size:.85rem}
+.rev-row:last-child{border:none;font-size:1rem;font-weight:700;color:var(--green)}
+.rev-inp{background:var(--bg);border:1px solid var(--b);border-radius:6px;padding:5px 8px;color:var(--text);font-size:.85rem;width:100px;text-align:right}
+.rev-inp:focus{outline:none;border-color:var(--acc)}
+
+/* ── PIPELINE KANBAN ── */
+.kanban{display:flex;gap:12px;padding:16px;overflow-x:auto;flex:1;align-items:flex-start}
+.kanban::-webkit-scrollbar{height:5px}
+.kanban::-webkit-scrollbar-thumb{background:var(--b);border-radius:4px}
+.kol{min-width:240px;max-width:260px;background:var(--s);border-radius:14px;border:1px solid var(--b);display:flex;flex-direction:column;max-height:calc(100vh - 130px)}
+.kol-head{padding:12px 14px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.kol-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.kol-title{font-size:.8rem;font-weight:700;flex:1}
+.kol-count{background:var(--b);border-radius:10px;padding:2px 7px;font-size:.68rem;color:var(--muted)}
+.kol-cards{padding:8px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:6px}
+.kol-cards::-webkit-scrollbar{width:3px}
+.kol-cards::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
+.kcard{background:var(--bg);border:1px solid var(--b);border-radius:10px;padding:12px;cursor:pointer;transition:all .12s}
+.kcard:hover{border-color:var(--acc);transform:translateY(-1px)}
+.kcard-name{font-size:.82rem;font-weight:700;margin-bottom:4px;line-height:1.3}
+.kcard-meta{font-size:.68rem;color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.kcard-score{margin-left:auto;font-size:.7rem;font-weight:700;padding:1px 6px;border-radius:6px}
+.kcard-phone{font-size:.72rem;color:var(--green);margin-top:5px}
+.kcard-fu{font-size:.66rem;color:var(--yellow);margin-top:4px;display:flex;align-items:center;gap:4px}
+.kcard-fu.overdue{color:var(--red)}
+.kcard-actions{display:flex;gap:4px;margin-top:8px}
+.kcard-btn{background:var(--s);border:1px solid var(--b);border-radius:5px;padding:3px 8px;font-size:.65rem;cursor:pointer;color:var(--muted);transition:all .12s}
+.kcard-btn:hover{border-color:var(--acc);color:#a5b4fc}
+.kcard-btn.wa{color:#4ade80;border-color:#166534;background:#052e16}
+
+/* ── LEADS TABLE ── */
+.leads-top{padding:12px 16px;background:var(--s);border-bottom:1px solid var(--b);display:flex;gap:10px;flex-wrap:wrap;align-items:center;flex-shrink:0}
+.filter-inp{background:var(--bg);border:1px solid var(--b);border-radius:8px;padding:8px 12px;color:var(--text);font-size:.8rem;flex:1;min-width:180px}
+.filter-inp:focus{outline:none;border-color:var(--acc)}
+.filter-sel{background:var(--bg);border:1px solid var(--b);border-radius:8px;padding:8px 10px;color:var(--text);font-size:.78rem;cursor:pointer}
+.filter-sel:focus{outline:none;border-color:var(--acc)}
+.tag{padding:4px 10px;border-radius:6px;font-size:.7rem;font-weight:700;cursor:pointer;border:1px solid var(--b);background:var(--bg);color:var(--muted);transition:all .12s;white-space:nowrap}
+.tag.on{background:#1e1b4b;border-color:var(--acc);color:#a5b4fc}
+.tag.green.on{background:#064e3b;border-color:var(--green);color:#4ade80}
+
+.leads-table-wrap{flex:1;overflow:auto}
+.leads-table-wrap::-webkit-scrollbar{width:4px;height:4px}
+.leads-table-wrap::-webkit-scrollbar-thumb{background:var(--b);border-radius:4px}
+table{width:100%;border-collapse:collapse;font-size:.78rem}
+thead{position:sticky;top:0;z-index:10;background:#0c1425}
+th{padding:10px 12px;text-align:left;color:var(--muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--b);white-space:nowrap;cursor:pointer}
+th:hover{color:var(--text)}
+td{padding:9px 12px;border-bottom:1px solid rgba(51,65,85,.5);vertical-align:middle}
+tr:hover td{background:rgba(30,41,59,.4)}
+.td-name{font-weight:600;color:var(--text);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.td-phone{color:var(--green);font-family:monospace;font-size:.8rem}
+.td-type{color:var(--muted);font-size:.72rem}
+
+/* pills */
+.pill{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:.65rem;font-weight:700}
+.pill-pending{background:#1e293b;color:#94a3b8}
+.pill-contactado{background:#1e3a8a;color:#93c5fd}
+.pill-interesado{background:#064e3b;color:#4ade80}
+.pill-reunion{background:#78350f;color:#fcd34d}
+.pill-propuesta{background:#7c2d12;color:#fdba74}
+.pill-cerrado{background:#14532d;color:#4ade80}
+.pill-cliente{background:#312e81;color:#a5b4fc}
+.pill-no{background:#450a0a;color:#fca5a5}
+
+.score-bar{display:flex;align-items:center;gap:6px}
+.score-val{font-size:.72rem;font-weight:700;min-width:26px;text-align:right}
+.score-track{flex:1;background:var(--b);border-radius:3px;height:5px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;transition:width .3s}
+
+/* ── SEARCH VIEW ── */
+.search-view{display:flex;flex-direction:column;height:100%}
+.search-top{background:var(--nav);border-bottom:1px solid var(--b);padding:14px 20px;flex-shrink:0}
+.search-row{display:flex;gap:8px;max-width:900px}
+.search-inp{flex:1;background:var(--s);border:2px solid var(--b);border-radius:10px;padding:12px 16px;color:var(--text);font-size:.95rem;transition:border .15s}
 .search-inp:focus{outline:none;border-color:var(--acc)}
 .search-inp::placeholder{color:var(--faint)}
-.search-btn{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;border-radius:12px;padding:14px 22px;cursor:pointer;font-size:.95rem;font-weight:700;transition:all .15s;white-space:nowrap}
+.search-btn{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;border-radius:10px;padding:12px 20px;cursor:pointer;font-size:.9rem;font-weight:700;white-space:nowrap;transition:all .15s}
 .search-btn:hover{opacity:.9;transform:translateY(-1px)}
 .search-btn:disabled{background:var(--b);color:var(--faint);transform:none;cursor:not-allowed}
-
-.search-examples{max-width:800px;margin:8px auto 0;display:flex;gap:6px;flex-wrap:wrap}
-.ex{background:var(--bg);border:1px solid var(--b);border-radius:20px;padding:4px 12px;font-size:.72rem;color:var(--muted);cursor:pointer;transition:all .15s}
+.examples{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;max-width:900px}
+.ex{background:var(--bg);border:1px solid var(--b);border-radius:20px;padding:4px 12px;font-size:.7rem;color:var(--muted);cursor:pointer;transition:all .15s}
 .ex:hover{border-color:var(--acc);color:#a5b4fc}
+.radius-row{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;max-width:900px;align-items:center}
+.rc{background:var(--bg);border:1px solid var(--b);border-radius:6px;padding:3px 9px;font-size:.7rem;cursor:pointer;color:var(--muted);transition:all .15s}
+.rc.on{border-color:var(--acc);color:#a5b4fc;background:#1e1b4b}
 
-/* LAYOUT */
-.layout{display:grid;grid-template-columns:1fr 360px;flex:1;overflow:hidden;min-height:0}
-@media(max-width:720px){.layout{grid-template-columns:1fr;overflow:visible}}
-
-/* LEFT: CALL PANEL */
-.call-area{display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--b)}
-
-.stats-bar{display:flex;border-bottom:1px solid var(--b);flex-shrink:0}
-.sp{flex:1;padding:10px 8px;text-align:center;background:var(--s)}
-.sp .n{font-size:1.2rem;font-weight:800}
-.sp .l{font-size:.62rem;text-transform:uppercase;color:var(--muted);letter-spacing:.3px}
+.search-body{display:grid;grid-template-columns:1fr 320px;flex:1;overflow:hidden;min-height:0}
+@media(max-width:700px){.search-body{grid-template-columns:1fr;overflow:visible}}
+.call-panel{border-right:1px solid var(--b);display:flex;flex-direction:column;overflow:hidden}
+.stats-strip{display:flex;border-bottom:1px solid var(--b);flex-shrink:0}
+.ssp{flex:1;padding:9px 6px;text-align:center;background:var(--s)}
+.ssp .n{font-size:1.1rem;font-weight:800}.ssp .l{font-size:.6rem;text-transform:uppercase;color:var(--muted);letter-spacing:.3px}
 .ng{color:var(--green)}.ny{color:var(--yellow)}.nr{color:var(--red)}.nb{color:var(--blue)}
-
-.prog-bar-wrap{background:var(--bg);border-bottom:1px solid var(--b);padding:7px 16px;display:flex;align-items:center;gap:10px;font-size:.72rem;color:var(--muted);flex-shrink:0}
-.prog-track{flex:1;background:var(--b);border-radius:4px;height:5px;overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:4px;transition:width .3s}
-
-.cur-call{padding:20px;flex-shrink:0;background:#0c1425;border-bottom:1px solid var(--b)}
-.cc-num{font-size:.7rem;color:var(--muted);margin-bottom:6px}
-.cc-name{font-size:1.35rem;font-weight:800;line-height:1.2}
-.cc-addr{color:var(--muted);font-size:.8rem;margin-top:4px}
-.cc-badge{display:inline-flex;align-items:center;gap:5px;background:#2e1065;color:#a5b4fc;font-size:.7rem;padding:3px 10px;border-radius:20px;margin:8px 0 12px}
-.cc-phone{font-size:2rem;font-weight:900;letter-spacing:1px;margin-bottom:16px}
+.prog-wrap{display:flex;align-items:center;gap:8px;padding:6px 14px;background:var(--bg);border-bottom:1px solid var(--b);font-size:.7rem;color:var(--muted);flex-shrink:0}
+.prog-track{flex:1;background:var(--b);border-radius:3px;height:4px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:3px;transition:width .3s}
+.cur-call{padding:16px;flex-shrink:0;background:#0c1425;border-bottom:1px solid var(--b);overflow-y:auto}
+.cc-num{font-size:.68rem;color:var(--muted);margin-bottom:5px}
+.cc-name{font-size:1.25rem;font-weight:800;line-height:1.2}
+.cc-addr{color:var(--muted);font-size:.78rem;margin-top:3px}
+.cc-phone{font-size:1.8rem;font-weight:900;letter-spacing:1px;margin:10px 0}
 .cc-phone a{color:var(--green);text-decoration:none}
-.cc-phone a:hover{text-decoration:underline}
-
-.act-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px}
-.a{border:none;border-radius:10px;padding:11px 6px;cursor:pointer;font-size:.73rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all .15s}
-.a .i{font-size:1.2rem}
-.a:hover{transform:translateY(-2px);filter:brightness(1.1)}
-.a1{background:#065f46;color:#6ee7b7}
-.a2{background:#78350f;color:#fcd34d}
-.a3{background:#7f1d1d;color:#fca5a5}
-.a4{background:var(--s);color:var(--muted);border:1px solid var(--b)}
-
-/* WHATSAPP */
-.wa-box{background:#052e16;border:1px solid #16a34a;border-radius:10px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.wa-box.confirmed{background:#064e3b;border-color:#10b981}
-.wa-box.no-wa{background:#1c1917;border-color:#44403c;opacity:.6}
-.wa-phone{font-size:1.1rem;font-weight:800;color:#4ade80;flex:1}
-.wa-tag{font-size:.68rem;background:#14532d;color:#86efac;padding:2px 8px;border-radius:20px;font-weight:700}
-.btn-wa{background:#16a34a;color:#fff;border:none;border-radius:8px;padding:9px 14px;cursor:pointer;font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:5px;text-decoration:none;transition:all .15s;white-space:nowrap}
+.act-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
+.a{border:none;border-radius:9px;padding:10px 5px;cursor:pointer;font-size:.7rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all .15s}
+.a:hover{transform:translateY(-2px);filter:brightness(1.15)}
+.a1{background:#065f46;color:#6ee7b7}.a2{background:#78350f;color:#fcd34d}
+.a3{background:#7f1d1d;color:#fca5a5}.a4{background:var(--s);color:var(--muted);border:1px solid var(--b)}
+.wa-box{background:#052e16;border:1px solid #16a34a;border-radius:9px;padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.wa-box.confirmed{background:#064e3b;border-color:#10b981}.wa-box.no-wa{background:#1c1917;border-color:#44403c;opacity:.6}
+.btn-wa{background:#16a34a;color:#fff;border:none;border-radius:7px;padding:8px 12px;cursor:pointer;font-size:.76rem;font-weight:700;display:flex;align-items:center;gap:4px;text-decoration:none;transition:all .15s;white-space:nowrap}
 .btn-wa:hover{background:#15803d}
-.btn-wa-confirm{background:#064e3b;border:1px solid #10b981;color:#6ee7b7;border-radius:8px;padding:8px 12px;cursor:pointer;font-size:.75rem;font-weight:700;transition:all .15s}
-.btn-wa-confirm:hover{background:#065f46}
-.btn-wa-no{background:var(--s);border:1px solid var(--b);color:var(--faint);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:.75rem;transition:all .15s}
-.dot-wa{background:#22c55e}
-.wa-badge{font-size:.65rem;background:#14532d;color:#86efac;padding:1px 6px;border-radius:10px;font-weight:700;margin-left:4px}
-
-.notes-row{display:flex;gap:7px;margin-top:10px}
-.notes-inp{flex:1;background:var(--s);border:1px solid var(--b);border-radius:8px;padding:8px 11px;color:var(--text);font-size:.8rem;resize:none}
+.btn-wa-confirm{background:#064e3b;border:1px solid #10b981;color:#6ee7b7;border-radius:7px;padding:7px 10px;cursor:pointer;font-size:.72rem;font-weight:700}
+.btn-wa-no{background:var(--s);border:1px solid var(--b);color:var(--faint);border-radius:7px;padding:7px 10px;cursor:pointer;font-size:.72rem}
+.notes-row{display:flex;gap:6px;margin-top:8px}
+.notes-inp{flex:1;background:var(--s);border:1px solid var(--b);border-radius:7px;padding:7px 10px;color:var(--text);font-size:.78rem;resize:none}
 .notes-inp:focus{outline:none;border-color:var(--acc)}
-.maps-link{background:var(--s);border:1px solid var(--b);border-radius:8px;padding:8px 10px;color:var(--muted);text-decoration:none;font-size:.7rem;display:flex;flex-direction:column;align-items:center;gap:2px;transition:all .15s;white-space:nowrap}
+.maps-link{background:var(--s);border:1px solid var(--b);border-radius:7px;padding:7px 8px;color:var(--muted);text-decoration:none;font-size:.66rem;display:flex;flex-direction:column;align-items:center;gap:2px;transition:all .15s}
 .maps-link:hover{border-color:var(--acc);color:#a5b4fc}
-
-/* RIGHT: LIST */
-.list-area{display:flex;flex-direction:column;overflow:hidden}
-.list-top{padding:10px 12px;border-bottom:1px solid var(--b);background:var(--s);display:flex;flex-direction:column;gap:7px;flex-shrink:0}
-.list-search{background:var(--bg);border:1px solid var(--b);border-radius:7px;padding:7px 10px;color:var(--text);font-size:.78rem;width:100%}
+.list-panel{display:flex;flex-direction:column;overflow:hidden}
+.list-top{padding:8px 10px;border-bottom:1px solid var(--b);background:var(--s);display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.list-search{background:var(--bg);border:1px solid var(--b);border-radius:6px;padding:6px 10px;color:var(--text);font-size:.76rem;width:100%}
 .list-search:focus{outline:none;border-color:var(--acc)}
-.tabs{display:flex;gap:4px;flex-wrap:wrap}
-.tab{background:var(--bg);border:1px solid var(--b);border-radius:6px;padding:4px 9px;font-size:.7rem;cursor:pointer;color:var(--muted);transition:all .15s}
+.tabs{display:flex;gap:3px;flex-wrap:wrap}
+.tab{background:var(--bg);border:1px solid var(--b);border-radius:5px;padding:3px 8px;font-size:.67rem;cursor:pointer;color:var(--muted);transition:all .12s}
 .tab.on{background:#312e81;border-color:var(--acc);color:#a5b4fc;font-weight:700}
-
-.list-scroll{flex:1;overflow-y:auto;padding:8px}
+.list-scroll{flex:1;overflow-y:auto;padding:6px}
 .list-scroll::-webkit-scrollbar{width:3px}
-.list-scroll::-webkit-scrollbar-thumb{background:var(--b);border-radius:4px}
-
-.li{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:9px;cursor:pointer;border:1px solid transparent;margin-bottom:4px;transition:all .12s}
-.li:hover{background:var(--s);border-color:var(--b)}
-.li.cur{background:#1e1b4b;border-color:var(--acc)}
-.li-n{font-size:.66rem;color:var(--faint);min-width:20px;text-align:right}
+.list-scroll::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
+.li{display:flex;align-items:center;gap:6px;padding:8px;border-radius:8px;cursor:pointer;border:1px solid transparent;margin-bottom:3px;transition:all .1s}
+.li:hover{background:var(--s);border-color:var(--b)}.li.cur{background:#1e1b4b;border-color:var(--acc)}
+.li-n{font-size:.62rem;color:var(--faint);min-width:18px;text-align:right}
 .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.dp{background:var(--b)}.di{background:var(--green)}.dc{background:var(--yellow)}.dn{background:var(--red)}.ds{background:var(--faint)}
+.dp{background:var(--b)}.di{background:var(--green)}.dc{background:var(--yellow)}.dn{background:var(--red)}.ds{background:var(--faint)}.dwa{background:#22c55e}
 .li-info{flex:1;min-width:0}
-.li-nm{font-size:.82rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.li-ad{font-size:.68rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.li-ph{font-size:.68rem;color:var(--green);flex-shrink:0}
-
-.bottom-bar{padding:8px 12px;border-top:1px solid var(--b);background:var(--s);display:flex;gap:6px;flex-shrink:0}
-.bb-btn{background:var(--bg);border:1px solid var(--b);color:var(--muted);border-radius:7px;padding:6px 10px;font-size:.7rem;cursor:pointer;transition:all .15s}
+.li-nm{font-size:.8rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li-ad{font-size:.65rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li-ph{font-size:.65rem;color:var(--green);flex-shrink:0}
+.bottom-bar{padding:7px 10px;border-top:1px solid var(--b);background:var(--s);display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap}
+.bb-btn{background:var(--bg);border:1px solid var(--b);color:var(--muted);border-radius:6px;padding:5px 9px;font-size:.68rem;cursor:pointer;transition:all .12s}
 .bb-btn:hover{border-color:var(--acc);color:#a5b4fc}
+.wa-badge{font-size:.6rem;background:#14532d;color:#86efac;padding:1px 5px;border-radius:8px;font-weight:700;margin-left:3px}
 
 /* CENTER/LOADING */
-.center{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px;color:var(--faint);text-align:center;padding:40px;grid-column:1/-1}
-.center .ico{font-size:3.5rem}
-.center p{font-size:.88rem;line-height:1.8;max-width:340px;color:var(--muted)}
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;color:var(--faint);text-align:center;padding:40px;grid-column:1/-1}
+.center .ico{font-size:3rem}.center p{font-size:.85rem;line-height:1.8;max-width:340px;color:var(--muted)}
 .center strong{color:var(--text)}
-.spinner{width:36px;height:36px;border:3px solid var(--b);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
+.spinner{width:32px;height:32px;border:3px solid var(--b);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.load-step{font-size:.82rem;color:var(--muted);margin-top:4px}
-.load-detail{font-size:.72rem;color:var(--faint)}
+.load-step{font-size:.8rem;color:var(--muted)}.load-detail{font-size:.7rem;color:var(--faint)}
 
-/* RADIUS HINT */
-.radius-chips{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
-.rc2{background:var(--s);border:1px solid var(--b);border-radius:6px;padding:3px 9px;font-size:.7rem;cursor:pointer;color:var(--muted);transition:all .15s}
-.rc2.on{border-color:var(--acc);color:#a5b4fc;background:#1e1b4b}
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.on{display:flex}
+.modal{background:var(--s);border:1px solid var(--b);border-radius:16px;padding:24px;width:500px;max-width:95vw;max-height:88vh;overflow-y:auto;position:relative}
+.modal::-webkit-scrollbar{width:3px}.modal::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
+.modal-title{font-size:1rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--b);border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;color:var(--muted);font-size:.9rem;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{color:var(--text)}
+.form-row{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.form-row label{font-size:.72rem;color:var(--muted);font-weight:600}
+.form-inp{background:var(--bg);border:1px solid var(--b);border-radius:8px;padding:9px 12px;color:var(--text);font-size:.85rem;width:100%}
+.form-inp:focus{outline:none;border-color:var(--acc)}
+.form-inp option{background:var(--s)}
+.form-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.btn-primary{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;border-radius:8px;padding:9px 18px;cursor:pointer;font-size:.82rem;font-weight:700;transition:all .15s}
+.btn-primary:hover{opacity:.9}
+.btn-secondary{background:var(--bg);border:1px solid var(--b);color:var(--muted);border-radius:8px;padding:9px 18px;cursor:pointer;font-size:.82rem}
+.btn-secondary:hover{border-color:var(--acc);color:#a5b4fc}
+
+/* WA templates */
+.wa-tmpl{background:var(--bg);border:1px solid #166534;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:.78rem;line-height:1.6;color:var(--text);cursor:pointer;transition:all .12s}
+.wa-tmpl:hover{border-color:var(--green);background:#052e16}
+.wa-tmpl-lbl{font-size:.65rem;color:#4ade80;font-weight:700;margin-bottom:4px}
+
+/* Followup alert */
+.fu-alert{background:#78350f;border:1px solid var(--yellow);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;font-size:.82rem;cursor:pointer;margin-bottom:8px;transition:all .15s}
+.fu-alert:hover{background:#92400e}
+
+/* ── SETTINGS VIEW ── */
+.settings-wrap{max-width:700px;margin:0 auto;padding:20px}
+.setting-card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.setting-title{font-size:.85rem;font-weight:700;margin-bottom:12px;color:var(--text)}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--b);font-size:.82rem}
+.setting-row:last-child{border:none}
+.setting-val{font-size:.82rem;font-weight:700;color:var(--acc3)}
+
+/* Score colors */
+.score-hot{color:#4ade80}.score-warm{color:var(--yellow)}.score-cold{color:var(--orange)}.score-frost{color:var(--muted)}
+
+/* Grid helpers */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:600px){.row2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>📞 Negocios Sin Web — Marcador de Llamadas</h1>
-  <p>Gratis · Sin registro · Datos de OpenStreetMap · Escribe la zona y listo</p>
-</header>
+<!-- ── NAV ── -->
+<nav>
+  <div class="logo">LeadPro<span>CRM para Agencias Web</span></div>
+  <button class="nav-tab on" id="nt-dashboard" onclick="goView('dashboard')">📊 Dashboard</button>
+  <button class="nav-tab" id="nt-pipeline" onclick="goView('pipeline')">🏆 Pipeline</button>
+  <button class="nav-tab" id="nt-leads" onclick="goView('leads')">📋 Leads <span class="badge" id="leadsCountBadge">0</span></button>
+  <button class="nav-tab" id="nt-search" onclick="goView('search')">🔍 Buscar</button>
+  <div class="nav-right">
+    <div class="nav-kpi">Valor pipeline: <strong id="navPipeVal">€0</strong></div>
+    <button class="bb-btn" onclick="exportCSV()" style="font-size:.72rem">⬇️ Exportar CSV</button>
+  </div>
+</nav>
 
-<div class="search-wrap">
-  <div class="search-box">
-    <input class="search-inp" id="q" placeholder="Ej: restaurantes en Malasaña Madrid · peluquerías Gracia Barcelona · bares Triana Sevilla"
-      onkeydown="if(event.key==='Enter')buscar()">
-    <button class="search-btn" id="btn" onclick="buscar()">🔍 Buscar</button>
-  </div>
-  <div class="search-examples">
-    <span style="font-size:.7rem;color:var(--faint);align-self:center">Ejemplos:</span>
-    <div class="ex" onclick="setQ('restaurantes en Malasaña Madrid')">🍽️ Restaurantes Malasaña</div>
-    <div class="ex" onclick="setQ('peluquerías en Gracia Barcelona')">✂️ Peluquerías Gracia BCN</div>
-    <div class="ex" onclick="setQ('bares en Triana Sevilla')">🍺 Bares Triana Sevilla</div>
-    <div class="ex" onclick="setQ('talleres en Vallecas Madrid')">🚗 Talleres Vallecas</div>
-    <div class="ex" onclick="setQ('gimnasios en Valencia centro')">💪 Gimnasios Valencia</div>
-    <div class="ex" onclick="setQ('cafeterías en el Born Barcelona')">☕ Cafeterías El Born</div>
-    <div class="ex" onclick="setQ('hoteles en Palma de Mallorca')">🏨 Hoteles Palma</div>
-    <div class="ex" onclick="setQ('restaurantes en el Eixample Barcelona')">🍽️ Eixample Barcelona</div>
-    <div class="ex" onclick="setQ('bares en Chueca Madrid')">🍺 Chueca Madrid</div>
-    <div class="ex" onclick="setQ('peluquerías en Nervión Sevilla')">✂️ Nervión Sevilla</div>
-    <div class="ex" onclick="setQ('talleres en Cornellà Barcelona')">🚗 Cornellà BCN</div>
-    <div class="ex" onclick="setQ('restaurantes en Salamanca Madrid')">🍽️ Salamanca Madrid</div>
-    <div class="ex" onclick="setQ('cafeterías en Bilbao centro')">☕ Bilbao centro</div>
-    <div class="ex" onclick="setQ('peluquerías en Zaragoza centro')">✂️ Zaragoza centro</div>
-    <div class="ex" onclick="setQ('bares en el Cabanyal Valencia')">🍺 Cabanyal Valencia</div>
-    <div class="ex" onclick="setQ('restaurantes en Málaga centro')">🍽️ Málaga centro</div>
-    <div class="ex" onclick="setQ('talleres en Getafe Madrid')">🚗 Getafe Madrid</div>
-    <div class="ex" onclick="setQ('gimnasios en Murcia centro')">💪 Murcia centro</div>
-    <div class="ex" onclick="setQ('dentistas en Alicante centro')">🦷 Dentistas Alicante</div>
-    <div class="ex" onclick="setQ('panaderías en Lavapiés Madrid')">🥐 Lavapiés Madrid</div>
-  </div>
-  <div class="radius-chips" style="max-width:800px;margin:8px auto 0">
-    <span style="font-size:.7rem;color:var(--faint);align-self:center">Radio:</span>
-    <div class="rc2" id="r300" onclick="setR(300)">300m</div>
-    <div class="rc2" id="r500" onclick="setR(500)">500m</div>
-    <div class="rc2 on" id="r1000" onclick="setR(1000)">1 km</div>
-    <div class="rc2" id="r2000" onclick="setR(2000)">2 km</div>
-    <div class="rc2" id="r5000" onclick="setR(5000)">5 km</div>
-    <div class="rc2" id="r10000" onclick="setR(10000)">10 km</div>
-    <div class="rc2" id="r25000" onclick="setR(25000)">25 km</div>
-    <div class="rc2" id="r50000" onclick="setR(50000)">50 km</div>
+<main>
+
+<!-- ═══════════════ DASHBOARD VIEW ═══════════════ -->
+<div class="view on" id="view-dashboard">
+  <div class="scroll">
+
+    <!-- Followup alerts -->
+    <div id="fuAlerts"></div>
+
+    <!-- KPI grid -->
+    <div class="kpi-grid" id="kpiGrid">
+      <div class="kpi blue"><div class="ico">🏢</div><div class="val" id="k-total">0</div><div class="lbl">Leads encontrados</div></div>
+      <div class="kpi purple"><div class="ico">📞</div><div class="val" id="k-contactado">0</div><div class="lbl">Contactados</div></div>
+      <div class="kpi green"><div class="ico">✅</div><div class="val" id="k-interesado">0</div><div class="lbl">Interesados</div></div>
+      <div class="kpi yellow"><div class="ico">🤝</div><div class="val" id="k-reunion">0</div><div class="lbl">En reunión</div></div>
+      <div class="kpi orange"><div class="ico">📄</div><div class="val" id="k-propuesta">0</div><div class="lbl">Propuestas</div></div>
+      <div class="kpi green"><div class="ico">💰</div><div class="val" id="k-cerrado">0</div><div class="lbl">Ventas cerradas</div></div>
+      <div class="kpi purple"><div class="ico">🔄</div><div class="val" id="k-conv">0%</div><div class="lbl">Tasa conversión</div></div>
+      <div class="kpi green"><div class="ico">💵</div><div class="val" id="k-valor">€0</div><div class="lbl">Valor potencial</div><div class="sub" id="k-valor-sub"></div></div>
+    </div>
+
+    <!-- Pipeline bar -->
+    <div class="section-title">Pipeline Visual</div>
+    <div class="pipe-summary" id="pipeSummary"></div>
+
+    <!-- Row: activity + revenue calc -->
+    <div class="row2">
+      <div>
+        <div class="section-title">Actividad reciente</div>
+        <div class="activity-list" id="activityList">
+          <div style="color:var(--faint);font-size:.8rem;text-align:center;padding:20px">Busca negocios para empezar a registrar actividad</div>
+        </div>
+      </div>
+      <div>
+        <div class="section-title">Calculadora de ingresos</div>
+        <div class="rev-calc">
+          <div class="rev-row"><span>Precio medio por web</span><input class="rev-inp" id="calcPrice" type="number" value="1500" oninput="updateCalc()"> €</div>
+          <div class="rev-row"><span>Leads interesados</span><span id="calc-inter" style="font-weight:700;color:var(--acc3)">0</span></div>
+          <div class="rev-row"><span>Tasa cierre estimada</span><input class="rev-inp" id="calcRate" type="number" value="20" min="1" max="100" oninput="updateCalc()"> %</div>
+          <div class="rev-row"><span>Ventas esperadas</span><span id="calc-ventas" style="font-weight:700;color:var(--yellow)">0</span></div>
+          <div class="rev-row"><span>💰 Ingresos potenciales</span><span id="calc-total" style="color:var(--green)">€0</span></div>
+        </div>
+
+        <div style="margin-top:16px">
+          <div class="section-title">Top sectores</div>
+          <div id="topSectors" style="font-size:.78rem;color:var(--muted)">Sin datos</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top leads by score -->
+    <div class="section-title" style="margin-top:8px">Top leads por puntuación</div>
+    <div id="topLeads">
+      <div style="color:var(--faint);font-size:.8rem;text-align:center;padding:20px">Sin leads todavía. Usa "Buscar" para encontrar negocios.</div>
+    </div>
   </div>
 </div>
 
-<div class="layout" id="layout">
-  <div class="center" id="emptyState">
-    <div class="ico">📞</div>
-    <p>
-      <strong>Escribe qué buscas y dónde.</strong><br><br>
-      Detecta automáticamente el tipo de negocio. Solo necesitas escribir algo como:<br>
-      <em>"restaurantes en Malasaña"</em> o <em>"peluquerías Gracia Barcelona"</em>
-    </p>
+<!-- ═══════════════ PIPELINE VIEW ═══════════════ -->
+<div class="view" id="view-pipeline">
+  <div class="kanban" id="kanban"></div>
+</div>
+
+<!-- ═══════════════ LEADS TABLE VIEW ═══════════════ -->
+<div class="view" id="view-leads">
+  <div class="leads-top">
+    <input class="filter-inp" id="leadsQ" placeholder="🔍 Buscar por nombre, teléfono, dirección..." oninput="renderLeadsTable()">
+    <select class="filter-sel" id="leadsStage" onchange="renderLeadsTable()">
+      <option value="">Todas las etapas</option>
+      <option value="nuevo">Nuevos leads</option>
+      <option value="contactado">Contactados</option>
+      <option value="interesado">Interesados</option>
+      <option value="reunion">En reunión</option>
+      <option value="propuesta">Propuesta enviada</option>
+      <option value="cerrado">Venta cerrada</option>
+      <option value="cliente">Cliente activo</option>
+      <option value="no">No interesa</option>
+    </select>
+    <select class="filter-sel" id="leadsSort" onchange="renderLeadsTable()">
+      <option value="score">Ordenar: Puntuación</option>
+      <option value="name">Ordenar: Nombre</option>
+      <option value="stage">Ordenar: Etapa</option>
+      <option value="followup">Ordenar: Seguimiento</option>
+    </select>
+    <div class="tag on" id="tag-phone" onclick="toggleTag('phone')">📞 Con tel.</div>
+    <div class="tag green" id="tag-wa" onclick="toggleTag('wa')">💬 Con WA</div>
+    <div class="tag" id="tag-fu" onclick="toggleTag('fu')">⏰ Con seguimiento</div>
+  </div>
+  <div class="leads-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Negocio</th>
+          <th>Teléfono</th>
+          <th>Sector</th>
+          <th>Etapa</th>
+          <th>Puntuación</th>
+          <th>Seguimiento</th>
+          <th>Valor</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="leadsBody">
+        <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--faint)">Busca negocios para ver leads aquí</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════ SEARCH VIEW ═══════════════ -->
+<div class="view" id="view-search">
+  <div class="search-view">
+    <div class="search-top">
+      <div class="search-row">
+        <input class="search-inp" id="q" placeholder="Ej: restaurantes en Malasaña Madrid · peluquerías Gracia Barcelona · bares Triana Sevilla"
+          onkeydown="if(event.key==='Enter')buscar()">
+        <button class="search-btn" id="btn" onclick="buscar()">🔍 Buscar leads</button>
+      </div>
+      <div class="examples">
+        <span style="font-size:.68rem;color:var(--faint);align-self:center">Ejemplos:</span>
+        <div class="ex" onclick="setQ('restaurantes en Malasaña Madrid')">🍽️ Restaurantes Malasaña</div>
+        <div class="ex" onclick="setQ('peluquerías en Gracia Barcelona')">✂️ Peluquerías Gracia BCN</div>
+        <div class="ex" onclick="setQ('bares en Triana Sevilla')">🍺 Bares Triana Sevilla</div>
+        <div class="ex" onclick="setQ('talleres en Vallecas Madrid')">🚗 Talleres Vallecas</div>
+        <div class="ex" onclick="setQ('gimnasios en Valencia centro')">💪 Gimnasios Valencia</div>
+        <div class="ex" onclick="setQ('cafeterías en el Born Barcelona')">☕ Cafeterías El Born</div>
+        <div class="ex" onclick="setQ('hoteles en Palma de Mallorca')">🏨 Hoteles Palma</div>
+        <div class="ex" onclick="setQ('dentistas en Alicante centro')">🦷 Dentistas Alicante</div>
+        <div class="ex" onclick="setQ('panaderías en Lavapiés Madrid')">🥐 Lavapiés Madrid</div>
+        <div class="ex" onclick="setQ('bares en Chueca Madrid')">🍺 Chueca Madrid</div>
+        <div class="ex" onclick="setQ('restaurantes en Salamanca Madrid')">🍽️ Salamanca Madrid</div>
+        <div class="ex" onclick="setQ('cafeterías en Bilbao centro')">☕ Bilbao centro</div>
+        <div class="ex" onclick="setQ('peluquerías en Zaragoza centro')">✂️ Zaragoza centro</div>
+        <div class="ex" onclick="setQ('restaurantes en Málaga centro')">🍽️ Málaga centro</div>
+        <div class="ex" onclick="setQ('gimnasios en Murcia centro')">💪 Murcia centro</div>
+      </div>
+      <div class="radius-row">
+        <span style="font-size:.68rem;color:var(--faint)">Radio:</span>
+        <div class="rc" id="r300" onclick="setR(300)">300m</div>
+        <div class="rc" id="r500" onclick="setR(500)">500m</div>
+        <div class="rc on" id="r1000" onclick="setR(1000)">1 km</div>
+        <div class="rc" id="r2000" onclick="setR(2000)">2 km</div>
+        <div class="rc" id="r5000" onclick="setR(5000)">5 km</div>
+        <div class="rc" id="r10000" onclick="setR(10000)">10 km</div>
+        <div class="rc" id="r25000" onclick="setR(25000)">25 km</div>
+        <div class="rc" id="r50000" onclick="setR(50000)">50 km</div>
+      </div>
+    </div>
+    <div class="search-body" id="searchBody">
+      <div class="center" id="emptyState">
+        <div class="ico">🎯</div>
+        <p><strong>Encuentra negocios sin web.</strong><br><br>
+        Escribe qué tipo de negocio y dónde.<br>
+        <em>"restaurantes en Malasaña"</em> o <em>"peluquerías Gracia Barcelona"</em><br><br>
+        Los leads se guardan automáticamente en tu CRM.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ── MODAL LEAD DETAIL ── -->
+<div class="modal-overlay" id="leadModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modalTitle">Detalle del lead</div>
+    <div id="modalBody"></div>
   </div>
 </div>
 
 <script>
-// ── CATEGORÍAS ─────────────────────────────────────────────────────
-// Mapeo de palabras → tags de OpenStreetMap
+// ══════════════════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════════════════
 const CAT_MAP = [
   {words:['restaurant','restaurante','restaurantes','comida','gastronom'],  tags:[{k:'amenity',v:'restaurant'}], label:'Restaurante'},
   {words:['bar','bares','taberna','taverna','pub','pubs','cervecería','cerveceria'], tags:[{k:'amenity',v:'bar'},{k:'amenity',v:'pub'}], label:'Bar/Pub'},
   {words:['café','cafe','cafetería','cafeteria','cafeterías','cafeterias','coffee'], tags:[{k:'amenity',v:'cafe'}], label:'Cafetería'},
   {words:['hotel','hoteles','hostal','hostales','pensión','pension','alojamiento','hospedaje'], tags:[{k:'tourism',v:'hotel'},{k:'tourism',v:'hostel'},{k:'tourism',v:'guest_house'}], label:'Hotel'},
-  {words:['peluquería','peluqueria','peluquerías','peluquerias','barbería','barberia','barbero','barbería'], tags:[{k:'shop',v:'hairdresser'},{k:'shop',v:'barber'}], label:'Peluquería'},
+  {words:['peluquería','peluqueria','peluquerías','peluquerias','barbería','barberia','barbero'], tags:[{k:'shop',v:'hairdresser'},{k:'shop',v:'barber'}], label:'Peluquería'},
   {words:['gimnasio','gimnasios','gym','gyms','fitness','crossfit'], tags:[{k:'leisure',v:'fitness_centre'},{k:'amenity',v:'gym'}], label:'Gimnasio'},
-  {words:['estética','estetica','esteticas','estetique','belleza','spa','uñas','unas','manicura'], tags:[{k:'shop',v:'beauty'}], label:'Estética'},
-  {words:['taller','talleres','mecánico','mecanico','mecánicos','mecanicos','coches','automovil'], tags:[{k:'shop',v:'car_repair'}], label:'Taller mecánico'},
+  {words:['estética','estetica','belleza','spa','uñas','unas','manicura'], tags:[{k:'shop',v:'beauty'}], label:'Estética'},
+  {words:['taller','talleres','mecánico','mecanico','mecánicos','coches','automovil'], tags:[{k:'shop',v:'car_repair'}], label:'Taller mecánico'},
   {words:['dentista','dentistas','dental','odontolog'], tags:[{k:'amenity',v:'dentist'}], label:'Dentista'},
   {words:['farmacia','farmacias','parafarmacia'], tags:[{k:'amenity',v:'pharmacy'}], label:'Farmacia'},
-  {words:['lavandería','lavanderia','lavanderías','lavanderias','tintorería','tintoreria'], tags:[{k:'shop',v:'laundry'},{k:'shop',v:'dry_cleaning'}], label:'Lavandería'},
-  {words:['panadería','panaderia','panaderías','panaderias','panadero','bakery','horno'], tags:[{k:'shop',v:'bakery'}], label:'Panadería'},
-  {words:['supermercado','supermercados','super','alimentación','alimentacion','frutería','fruteria','verdulería'], tags:[{k:'shop',v:'supermarket'},{k:'shop',v:'greengrocer'},{k:'shop',v:'convenience'}], label:'Alimentación'},
-  {words:['ropa','ropas','moda','boutique','tienda ropa','tiendas ropa','textil'], tags:[{k:'shop',v:'clothes'}], label:'Tienda de ropa'},
-  {words:['electricist','electricista','electricistas','eléctric','electric'], tags:[{k:'craft',v:'electrician'}], label:'Electricista'},
-  {words:['fontanero','fontaneros','plomero','plomeros','fontanería','fontaneria'], tags:[{k:'craft',v:'plumber'}], label:'Fontanero'},
-  {words:['pizzería','pizzeria','pizza','pizzas'], tags:[{k:'amenity',v:'fast_food'},{k:'amenity',v:'restaurant'}], label:'Pizzería'},
-  {words:['veterinario','veterinaria','veterinarios','vet','clínica veterinaria'], tags:[{k:'amenity',v:'veterinary'}], label:'Veterinario'},
-  {words:['clínica','clinica','médico','medico','médicos','consulta'], tags:[{k:'amenity',v:'clinic'},{k:'amenity',v:'doctors'}], label:'Clínica/Médico'},
-  {words:['joyería','joyeria','joyerías','joyerias','relojería','relojeria'], tags:[{k:'shop',v:'jewelry'}], label:'Joyería'},
-  {words:['librería','libreria','librerias','papelería','papeleria'], tags:[{k:'shop',v:'books'},{k:'shop',v:'stationery'}], label:'Librería'},
-  {words:['farmacia veterinaria'], tags:[{k:'shop',v:'agrarian'}], label:'Tienda agrícola'},
-  {words:['negocio','negocios','empresa','empresas','comercio','comercios','local','locales','tienda','tiendas'], tags:[{k:'shop',v:'convenience'}], label:'Comercio'},
+  {words:['lavandería','lavanderia','tintorería','tintoreria'], tags:[{k:'shop',v:'laundry'},{k:'shop',v:'dry_cleaning'}], label:'Lavandería'},
+  {words:['panadería','panaderia','panaderías','bakery','horno'], tags:[{k:'shop',v:'bakery'}], label:'Panadería'},
+  {words:['supermercado','alimentación','frutería','verdulería'], tags:[{k:'shop',v:'supermarket'},{k:'shop',v:'greengrocer'},{k:'shop',v:'convenience'}], label:'Alimentación'},
+  {words:['ropa','moda','boutique','textil'], tags:[{k:'shop',v:'clothes'}], label:'Tienda de ropa'},
+  {words:['electricist','electricista','eléctric'], tags:[{k:'craft',v:'electrician'}], label:'Electricista'},
+  {words:['fontanero','fontaneros','plomero','fontanería'], tags:[{k:'craft',v:'plumber'}], label:'Fontanero'},
+  {words:['pizzería','pizzeria','pizza'], tags:[{k:'amenity',v:'fast_food'},{k:'amenity',v:'restaurant'}], label:'Pizzería'},
+  {words:['veterinario','veterinaria','clínica veterinaria'], tags:[{k:'amenity',v:'veterinary'}], label:'Veterinario'},
+  {words:['clínica','clinica','médico','medico','consulta'], tags:[{k:'amenity',v:'clinic'},{k:'amenity',v:'doctors'}], label:'Clínica/Médico'},
+  {words:['joyería','joyeria','relojería','relojeria'], tags:[{k:'shop',v:'jewelry'}], label:'Joyería'},
+  {words:['librería','libreria','papelería','papeleria'], tags:[{k:'shop',v:'books'},{k:'shop',v:'stationery'}], label:'Librería'},
+  {words:['negocio','negocios','empresa','comercio','local','tienda'], tags:[{k:'shop',v:'convenience'}], label:'Comercio'},
 ];
 
-// Fallback: si no detecta categoría, usa esto
-const DEFAULT_TAGS = [{k:'amenity',v:'restaurant'}];
-const DEFAULT_LABEL = 'Negocio';
-
-// Todos los tipos de negocio para modo general
 const ALL_BUSINESS_TAGS = [
   {k:'amenity',v:'restaurant'},{k:'amenity',v:'cafe'},{k:'amenity',v:'bar'},
   {k:'amenity',v:'pub'},{k:'amenity',v:'fast_food'},{k:'amenity',v:'dentist'},
@@ -240,34 +499,479 @@ const ALL_BUSINESS_TAGS = [
 ];
 
 function getTypeLabel(t){
-  const map = {
-    restaurant:'Restaurante',cafe:'Cafetería',bar:'Bar',pub:'Bar/Pub',
-    fast_food:'Comida rápida',dentist:'Dentista',pharmacy:'Farmacia',
-    clinic:'Clínica',doctors:'Médico',veterinary:'Veterinario',gym:'Gimnasio',
-    hotel:'Hotel',hostel:'Hostal',guest_house:'Pensión',
-    hairdresser:'Peluquería',barber:'Barbería',beauty:'Estética',
-    car_repair:'Taller',laundry:'Lavandería',bakery:'Panadería',
+  const map={restaurant:'Restaurante',cafe:'Cafetería',bar:'Bar',pub:'Bar/Pub',
+    fast_food:'Comida rápida',dentist:'Dentista',pharmacy:'Farmacia',clinic:'Clínica',
+    doctors:'Médico',veterinary:'Veterinario',gym:'Gimnasio',hotel:'Hotel',
+    hostel:'Hostal',guest_house:'Pensión',hairdresser:'Peluquería',barber:'Barbería',
+    beauty:'Estética',car_repair:'Taller',laundry:'Lavandería',bakery:'Panadería',
     clothes:'Tienda ropa',supermarket:'Supermercado',convenience:'Tienda',
     jewelry:'Joyería',optician:'Óptica',florist:'Floristería',
-    fitness_centre:'Gimnasio',electrician:'Electricista',plumber:'Fontanero',
-  };
-  for(const [k,v] of Object.entries(t||{})){
-    if(map[v]) return map[v];
-  }
+    fitness_centre:'Gimnasio',electrician:'Electricista',plumber:'Fontanero'};
+  for(const[k,v] of Object.entries(t||{})){if(map[v]) return map[v];}
   return 'Negocio';
 }
 
-// ── ESTADO ─────────────────────────────────────────────────────────
-let calls = [];
+// WA message templates
+const WA_TEMPLATES = {
+  'Restaurante': '¡Hola! Vi que {nombre} no tiene página web. Como agencia web podemos crear una web profesional con menú online y reservas por solo 1.500€. ¿Le interesaría conocer más? 🍽️',
+  'Bar/Pub': '¡Hola! Noté que {nombre} no tiene web propia. Una web con carta y eventos puede traerles muchos más clientes. La creamos desde 990€. ¿Hablamos? 🍺',
+  'Peluquería': '¡Hola! Soy diseñador web y vi que {nombre} no tiene página web. Puedo crearles una con reservas online incluidas desde 990€. ¿Le gustaría saber más? ✂️',
+  'Gimnasio': '¡Hola! Vi que {nombre} no tiene web propia. Una web con horarios y clases online puede multiplicar sus inscripciones. La creamos desde 1.200€. ¿Hablamos? 💪',
+  'Taller mecánico': '¡Hola! Vi que {nombre} no aparece bien en Google. Puedo crear una web profesional con cita online desde 990€. Muchos clientes buscan talleres por internet. ¿Le interesa? 🔧',
+  'Hotel': '¡Hola! Vi que {nombre} no tiene web propia. Una web con reservas directas les ahorra las comisiones de Booking. La creamos desde 1.800€. ¿Hablamos? 🏨',
+  'default': '¡Hola! Soy desarrollador web y vi que {nombre} no tiene página web. Una web profesional puede traerles muchos más clientes. La creamos desde 990€. ¿Le interesaría? 🌐',
+};
+
+// Pipeline stages
+const STAGES = [
+  {id:'nuevo',    label:'Nuevos leads',      color:'#334155', dot:'#94a3b8'},
+  {id:'contactado',label:'Contactados',      color:'#1e3a8a', dot:'#93c5fd'},
+  {id:'interesado',label:'Interesados',      color:'#064e3b', dot:'#4ade80'},
+  {id:'reunion',  label:'En reunión',        color:'#78350f', dot:'#fcd34d'},
+  {id:'propuesta',label:'Propuesta enviada', color:'#7c2d12', dot:'#fdba74'},
+  {id:'cerrado',  label:'Venta cerrada 🎉',  color:'#14532d', dot:'#4ade80'},
+  {id:'cliente',  label:'Cliente activo ⭐', color:'#312e81', dot:'#a5b4fc'},
+  {id:'no',       label:'No interesa',       color:'#450a0a', dot:'#ef4444'},
+];
+
+// ══════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════
+let leads = []; // all leads (CRM global list)
+let calls = []; // current search results
 let curIdx = 0;
 let ftab = 'all';
 let fq = '';
 let soloTelef = true;
 let ftabWa = false;
 let searchRadius = 1000;
+let activity = [];
+let filterTags = {phone:true, wa:false, fu:false};
 
-// ── UI HELPERS ─────────────────────────────────────────────────────
-function setQ(v){ document.getElementById('q').value=v; }
+// ══════════════════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════════════════
+function goView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('view-'+id).classList.add('on');
+  document.getElementById('nt-'+id).classList.add('on');
+  if(id==='dashboard') renderDashboard();
+  if(id==='pipeline') renderKanban();
+  if(id==='leads') renderLeadsTable();
+}
+
+// ══════════════════════════════════════════════════════
+//  SCORING (0-100)
+// ══════════════════════════════════════════════════════
+function calcScore(lead){
+  let s=0;
+  if(lead.phone) s+=25;
+  if(lead.waStatus==='yes'||lead.hasWaTag) s+=20;
+  if(lead.address) s+=10;
+  // stage bonus
+  const stageBonus={nuevo:0,contactado:5,interesado:20,reunion:35,propuesta:45,cerrado:60,cliente:60,no:-30};
+  s += stageBonus[lead.stage||'nuevo']||0;
+  // sector attractiveness
+  const sectorScore={Hotel:15,Gimnasio:12,Restaurante:10,Clínica:10,'Clínica/Médico':10,Dentista:10,Peluquería:8,'Bar/Pub':6,'Taller mecánico':8};
+  s += sectorScore[lead.typeLabel]||5;
+  // followup set = engaged
+  if(lead.followUpDate) s+=5;
+  if(lead.notes&&lead.notes.length>5) s+=5;
+  return Math.max(0, Math.min(100, s));
+}
+
+function scoreColor(s){
+  if(s>=70) return 'score-hot';
+  if(s>=45) return 'score-warm';
+  if(s>=25) return 'score-cold';
+  return 'score-frost';
+}
+function scoreLabel(s){
+  if(s>=70) return '🔥 Hot';
+  if(s>=45) return '🌡️ Warm';
+  if(s>=25) return '❄️ Cool';
+  return '💤 Cold';
+}
+
+// ══════════════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════════════
+function renderDashboard(){
+  const all = leads;
+  const byStage = s => all.filter(l=>l.stage===s).length;
+  const total = all.length;
+  const cont = byStage('contactado');
+  const inter = byStage('interesado');
+  const reun = byStage('reunion');
+  const prop = byStage('propuesta');
+  const cerr = byStage('cerrado');
+  const conv = total>0 ? Math.round(cerr/total*100) : 0;
+  const price = parseFloat(document.getElementById('calcPrice')?.value||1500);
+  const valor = (inter+reun+prop)*price + cerr*price;
+
+  setText('k-total', total);
+  setText('k-contactado', cont);
+  setText('k-interesado', inter);
+  setText('k-reunion', reun);
+  setText('k-propuesta', prop);
+  setText('k-cerrado', cerr);
+  setText('k-conv', conv+'%');
+  setText('k-valor', '€'+valor.toLocaleString('es'));
+  setText('k-valor-sub', `${cerr*price>0?'Cerrado: €'+(cerr*price).toLocaleString('es'):''}`);
+  setText('navPipeVal', '€'+valor.toLocaleString('es'));
+  setText('leadsCountBadge', total);
+
+  // Pipeline bar
+  const stages = STAGES.slice(0,7);
+  const pipeEl = document.getElementById('pipeSummary');
+  const counts = stages.map(st=>({...st, n:all.filter(l=>(l.stage||'nuevo')===st.id).length}));
+  const maxN = Math.max(1,...counts.map(c=>c.n));
+  pipeEl.innerHTML = counts.map((c,i)=>`
+    <div class="ps s${i}" style="flex:${Math.max(0.2,c.n/maxN)}" onclick="goViewStage('${c.id}')" title="${c.label}">
+      ${c.n>0?`${c.n}`:''}
+    </div>
+  `).join('');
+
+  // Followup alerts
+  const today = new Date(); today.setHours(0,0,0,0);
+  const overdue = all.filter(l=>{
+    if(!l.followUpDate) return false;
+    const d=new Date(l.followUpDate); d.setHours(0,0,0,0);
+    return d<=today && l.stage!=='cerrado' && l.stage!=='no';
+  });
+  const fuEl = document.getElementById('fuAlerts');
+  if(overdue.length){
+    fuEl.innerHTML = overdue.slice(0,3).map(l=>`
+      <div class="fu-alert" onclick="openModal(leads.indexOf(leads.find(x=>x.id==='${l.id}')))">
+        ⏰ <strong>${esc(l.name)}</strong> — ${l.followUpDate=== new Date().toISOString().slice(0,10)?'Hoy':'Vencido'}: ${l.followUpNote||'Seguimiento pendiente'}
+        <span style="margin-left:auto;font-size:.68rem;color:var(--muted)">${l.stage||'nuevo'}</span>
+      </div>
+    `).join('');
+    if(overdue.length>3) fuEl.innerHTML += `<div style="font-size:.75rem;color:var(--yellow);margin-bottom:10px;padding:0 4px">...y ${overdue.length-3} más con seguimiento pendiente</div>`;
+  } else {
+    fuEl.innerHTML = '';
+  }
+
+  // Calc
+  updateCalc();
+
+  // Top sectors
+  const sectorMap = {};
+  all.forEach(l=>{const s=l.typeLabel||'Otro'; sectorMap[s]=(sectorMap[s]||0)+1;});
+  const topS = Object.entries(sectorMap).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const tsEl = document.getElementById('topSectors');
+  if(topS.length){
+    const maxV = topS[0][1];
+    tsEl.innerHTML = topS.map(([k,v])=>`
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span style="min-width:110px;font-size:.75rem;color:var(--text)">${k}</span>
+        <div style="flex:1;background:var(--b);border-radius:3px;height:6px;overflow:hidden">
+          <div style="width:${Math.round(v/maxV*100)}%;height:100%;background:var(--acc);border-radius:3px"></div>
+        </div>
+        <span style="font-size:.72rem;color:var(--acc3);min-width:20px;text-align:right">${v}</span>
+      </div>
+    `).join('');
+  } else {
+    tsEl.innerHTML = '<div style="color:var(--faint);font-size:.78rem">Sin datos</div>';
+  }
+
+  // Top leads by score
+  const sorted = [...all].sort((a,b)=>calcScore(b)-calcScore(a)).slice(0,6);
+  const tlEl = document.getElementById('topLeads');
+  if(sorted.length){
+    tlEl.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">`+
+    sorted.map(l=>{
+      const sc=calcScore(l);
+      const idx=leads.indexOf(l);
+      return `<div style="background:var(--s);border:1px solid var(--b);border-radius:10px;padding:12px;cursor:pointer" onclick="openModal(${idx})">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+          <div style="font-size:.82rem;font-weight:700;line-height:1.3;max-width:160px">${esc(l.name)}</div>
+          <span class="${scoreColor(sc)}" style="font-size:.72rem;font-weight:700;background:var(--bg);padding:2px 7px;border-radius:6px">${sc}</span>
+        </div>
+        <div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">${esc(l.typeLabel)} · ${esc(l.address||'').split(',')[0]}</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          ${stagePill(l.stage||'nuevo')}
+          ${l.phone?`<span style="font-size:.68rem;color:var(--green)">📞</span>`:''}
+          ${(l.waStatus==='yes'||l.hasWaTag)?`<span style="font-size:.68rem;color:#4ade80">💬</span>`:''}
+        </div>
+      </div>`;
+    }).join('') + '</div>';
+  } else {
+    tlEl.innerHTML = '<div style="color:var(--faint);font-size:.8rem;text-align:center;padding:20px">Sin leads todavía. Usa "Buscar" para encontrar negocios.</div>';
+  }
+
+  // Activity
+  const actEl = document.getElementById('activityList');
+  if(activity.length){
+    actEl.innerHTML = activity.slice(-8).reverse().map(a=>`
+      <div class="act-item">
+        <div class="act-dot" style="background:${a.color||'var(--acc)'}"></div>
+        <div style="flex:1">${a.text}</div>
+        <div style="font-size:.65rem;color:var(--faint)">${a.time}</div>
+      </div>
+    `).join('');
+  } else {
+    actEl.innerHTML = '<div style="color:var(--faint);font-size:.8rem;text-align:center;padding:20px">Sin actividad todavía</div>';
+  }
+}
+
+function updateCalc(){
+  const price = parseFloat(document.getElementById('calcPrice')?.value||1500);
+  const rate = parseFloat(document.getElementById('calcRate')?.value||20)/100;
+  const inter = leads.filter(l=>['interesado','reunion','propuesta'].includes(l.stage||'nuevo')).length;
+  const ventas = Math.round(inter * rate);
+  const total = ventas * price;
+  setText('calc-inter', inter);
+  setText('calc-ventas', ventas);
+  setText('calc-total', '€'+total.toLocaleString('es'));
+}
+
+// ══════════════════════════════════════════════════════
+//  PIPELINE KANBAN
+// ══════════════════════════════════════════════════════
+function goViewStage(stageId){
+  goView('pipeline');
+  // scroll to that column
+  setTimeout(()=>{
+    const col=document.querySelector(`[data-stage="${stageId}"]`);
+    if(col) col.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  },100);
+}
+
+function renderKanban(){
+  const kb = document.getElementById('kanban');
+  kb.innerHTML = STAGES.map(st=>{
+    const cols = leads.filter(l=>(l.stage||'nuevo')===st.id);
+    const sorted = [...cols].sort((a,b)=>calcScore(b)-calcScore(a));
+    return `
+      <div class="kol" data-stage="${st.id}">
+        <div class="kol-head">
+          <div class="kol-dot" style="background:${st.dot}"></div>
+          <div class="kol-title">${st.label}</div>
+          <div class="kol-count">${cols.length}</div>
+        </div>
+        <div class="kol-cards">
+          ${sorted.length ? sorted.map(l=>{
+            const idx=leads.indexOf(l);
+            const sc=calcScore(l);
+            const today=new Date().toISOString().slice(0,10);
+            const fuOverdue = l.followUpDate && l.followUpDate<=today && st.id!=='cerrado' && st.id!=='no';
+            return `<div class="kcard" onclick="openModal(${idx})">
+              <div class="kcard-name">${esc(l.name)}</div>
+              <div class="kcard-meta">
+                <span>${esc(l.typeLabel)}</span>
+                <span class="kcard-score ${scoreColor(sc)}" style="background:var(--bg)">${sc}</span>
+              </div>
+              ${l.phone?`<div class="kcard-phone">📞 ${esc(l.phone)}</div>`:''}
+              ${l.followUpDate?`<div class="kcard-fu ${fuOverdue?'overdue':''}">⏰ ${fuOverdue?'VENCIDO: ':''}${l.followUpDate}</div>`:''}
+              <div class="kcard-actions" onclick="event.stopPropagation()">
+                ${STAGES.filter(s=>s.id!==st.id&&s.id!=='no').slice(0,2).map(ns=>`
+                  <button class="kcard-btn" onclick="moveStage(${idx},'${ns.id}');event.stopPropagation()">→ ${ns.label.replace(' 🎉','').replace(' ⭐','')}</button>
+                `).join('')}
+                ${l.waPhone||l.phone?`<a class="kcard-btn wa" href="https://wa.me/${waNum(l.waPhone||l.phone)}?text=${encodeURIComponent(getWaTemplate(l))}" target="_blank" onclick="event.stopPropagation()">💬 WA</a>`:''}
+              </div>
+            </div>`;
+          }).join('') : `<div style="padding:20px;text-align:center;color:var(--faint);font-size:.75rem">Sin leads</div>`}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function moveStage(idx, newStage){
+  if(!leads[idx]) return;
+  const old = leads[idx].stage||'nuevo';
+  leads[idx].stage = newStage;
+  logActivity(`<strong>${esc(leads[idx].name)}</strong> movido a <em>${STAGES.find(s=>s.id===newStage)?.label}</em>`, newStage==='cerrado'?'#4ade80':newStage==='interesado'?'#10b981':'var(--acc)');
+  syncLeadsFromCalls();
+  renderKanban();
+  renderDashboard();
+}
+
+// ══════════════════════════════════════════════════════
+//  LEADS TABLE
+// ══════════════════════════════════════════════════════
+function toggleTag(id){
+  filterTags[id]=!filterTags[id];
+  const el=document.getElementById('tag-'+id);
+  if(el) el.classList.toggle('on', filterTags[id]);
+  renderLeadsTable();
+}
+
+function renderLeadsTable(){
+  const q=(document.getElementById('leadsQ')?.value||'').toLowerCase();
+  const stage=document.getElementById('leadsStage')?.value||'';
+  const sort=document.getElementById('leadsSort')?.value||'score';
+
+  let list = [...leads];
+  if(filterTags.phone) list=list.filter(l=>l.phone);
+  if(filterTags.wa) list=list.filter(l=>l.waStatus==='yes'||l.hasWaTag);
+  if(filterTags.fu) list=list.filter(l=>l.followUpDate);
+  if(stage) list=list.filter(l=>(l.stage||'nuevo')===stage);
+  if(q) list=list.filter(l=>l.name.toLowerCase().includes(q)||l.phone.includes(q)||(l.address||'').toLowerCase().includes(q));
+
+  if(sort==='score') list.sort((a,b)=>calcScore(b)-calcScore(a));
+  else if(sort==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sort==='stage') list.sort((a,b)=>STAGES.findIndex(s=>s.id===(a.stage||'nuevo'))-STAGES.findIndex(s=>s.id===(b.stage||'nuevo')));
+  else if(sort==='followup') list.sort((a,b)=>(a.followUpDate||'9999').localeCompare(b.followUpDate||'9999'));
+
+  const today=new Date().toISOString().slice(0,10);
+  const tbody=document.getElementById('leadsBody');
+  if(!list.length){
+    tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--faint)">Sin leads con estos filtros</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = list.map(l=>{
+    const idx=leads.indexOf(l);
+    const sc=calcScore(l);
+    const fuOverdue=l.followUpDate&&l.followUpDate<=today&&l.stage!=='cerrado'&&l.stage!=='no';
+    const price=parseFloat(document.getElementById('calcPrice')?.value||1500);
+    return `<tr>
+      <td>
+        <div class="td-name" title="${esc(l.name)}">${esc(l.name)}</div>
+        <div class="td-type">${esc(l.address||'').split(',')[0]||esc(l.typeLabel)}</div>
+      </td>
+      <td class="td-phone">
+        ${l.phone?`<a href="tel:${esc(l.phone.replace(/\D/g,''))}" style="color:var(--green);text-decoration:none">${esc(l.phone)}</a>`:'—'}
+        ${(l.waStatus==='yes'||l.hasWaTag)?`<span class="wa-badge">WA</span>`:''}
+      </td>
+      <td class="td-type">${esc(l.typeLabel)}</td>
+      <td>${stagePill(l.stage||'nuevo')}</td>
+      <td>
+        <div class="score-bar">
+          <div class="score-track"><div class="score-fill" style="width:${sc}%;background:${sc>=70?'#10b981':sc>=45?'#f59e0b':sc>=25?'#f97316':'#475569'}"></div></div>
+          <span class="score-val ${scoreColor(sc)}">${sc}</span>
+        </div>
+      </td>
+      <td style="font-size:.72rem;color:${fuOverdue?'var(--red)':'var(--muted)'}">
+        ${l.followUpDate?`${fuOverdue?'⚠️ ':' '}${l.followUpDate}`:'—'}
+      </td>
+      <td style="font-size:.78rem;color:var(--green);font-weight:700">
+        ${l.stage==='cerrado'?'€'+price.toLocaleString('es'):l.stage==='propuesta'?`<span style="color:var(--yellow)">~€${price.toLocaleString('es')}</span>`:'—'}
+      </td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="kcard-btn" onclick="openModal(${idx})" style="font-size:.68rem">✏️ Editar</button>
+          ${l.phone?`<a class="kcard-btn wa" href="tel:${esc(l.phone.replace(/\D/g,''))}" style="color:var(--green);text-decoration:none">📞</a>`:''}
+          ${l.waPhone||l.phone?`<a class="kcard-btn wa" href="https://wa.me/${waNum(l.waPhone||l.phone)}?text=${encodeURIComponent(getWaTemplate(l))}" target="_blank" style="text-decoration:none">💬</a>`:''}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function stagePill(stage){
+  return `<span class="pill pill-${stage||'nuevo'}">${STAGES.find(s=>s.id===(stage||'nuevo'))?.label||stage}</span>`;
+}
+
+// ══════════════════════════════════════════════════════
+//  MODAL
+// ══════════════════════════════════════════════════════
+function openModal(idx){
+  const l = leads[idx];
+  if(!l) return;
+  const sc = calcScore(l);
+  document.getElementById('modalTitle').innerHTML = `${esc(l.name)} <span class="${scoreColor(sc)}" style="font-size:.8rem;font-weight:700;background:var(--bg);padding:2px 8px;border-radius:6px">${sc} — ${scoreLabel(sc)}</span>`;
+  const waT = getWaTemplate(l);
+  document.getElementById('modalBody').innerHTML = `
+    <div class="form-grid2">
+      <div class="form-row">
+        <label>Teléfono</label>
+        <a href="tel:${esc((l.phone||'').replace(/\D/g,''))}" style="color:var(--green);font-weight:700;font-size:1.1rem;text-decoration:none">${esc(l.phone)||'—'}</a>
+      </div>
+      <div class="form-row">
+        <label>Tipo</label>
+        <div style="font-size:.85rem">${esc(l.typeLabel)}</div>
+      </div>
+    </div>
+    ${l.address?`<div class="form-row"><label>Dirección</label><div style="font-size:.82rem">📍 ${esc(l.address)}</div></div>`:''}
+    <a href="${esc(l.mapsUrl)}" target="_blank" style="font-size:.72rem;color:var(--acc3);text-decoration:none">🗺️ Ver en OpenStreetMap</a>
+
+    <hr style="border:none;border-top:1px solid var(--b);margin:14px 0">
+
+    <div class="form-row">
+      <label>Etapa del pipeline</label>
+      <select class="form-inp" onchange="leads[${idx}].stage=this.value;renderKanban();renderDashboard();renderLeadsTable();logActivity('<strong>${esc(l.name)}</strong> → '+this.options[this.selectedIndex].text, 'var(--acc)')">
+        ${STAGES.map(s=>`<option value="${s.id}" ${(l.stage||'nuevo')===s.id?'selected':''}>${s.label}</option>`).join('')}
+      </select>
+    </div>
+
+    <div class="form-grid2">
+      <div class="form-row">
+        <label>Seguimiento — fecha</label>
+        <input type="date" class="form-inp" value="${l.followUpDate||''}" onchange="leads[${idx}].followUpDate=this.value;renderDashboard()">
+      </div>
+      <div class="form-row">
+        <label>Nota de seguimiento</label>
+        <input class="form-inp" placeholder="Qué hay que hacer..." value="${esc(l.followUpNote||'')}" oninput="leads[${idx}].followUpNote=this.value">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label>Notas</label>
+      <textarea class="form-inp" rows="3" placeholder="Qué dijo, cuándo llamar, detalles..." oninput="leads[${idx}].notes=this.value">${esc(l.notes||'')}</textarea>
+    </div>
+
+    <div class="form-row">
+      <label>Valor del deal (€)</label>
+      <input type="number" class="form-inp" value="${l.dealValue||document.getElementById('calcPrice')?.value||1500}" oninput="leads[${idx}].dealValue=parseFloat(this.value)||0;renderDashboard()">
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--b);margin:14px 0">
+
+    <div style="font-size:.75rem;font-weight:700;color:#4ade80;margin-bottom:8px">💬 Plantillas WhatsApp</div>
+    ${l.waPhone||l.phone ? `<div style="margin-bottom:10px">
+      <a class="btn-wa" href="https://wa.me/${waNum(l.waPhone||l.phone)}?text=${encodeURIComponent(waT)}" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Enviar mensaje ahora
+      </a>
+    </div>` : ''}
+    ${Object.entries(WA_TEMPLATES).filter(([k])=>k!=='default').slice(0,3).map(([k,t])=>`
+      <div class="wa-tmpl" onclick="navigator.clipboard&&navigator.clipboard.writeText(${JSON.stringify(t.replace(/{nombre}/g,l.name))}).then(()=>alert('Copiado al portapapeles'))">
+        <div class="wa-tmpl-lbl">${k}</div>
+        ${t.replace(/{nombre}/g,`<strong>${esc(l.name)}</strong>`)}
+      </div>
+    `).join('')}
+
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal()">Cerrar</button>
+      <button class="btn-primary" onclick="moveStage(${idx},'cerrado');closeModal()">🎉 Marcar como cerrado</button>
+    </div>
+  `;
+  document.getElementById('leadModal').classList.add('on');
+}
+
+function closeModal(){
+  document.getElementById('leadModal').classList.remove('on');
+  syncLeadsFromCalls();
+}
+
+document.getElementById('leadModal').addEventListener('click', e=>{
+  if(e.target===document.getElementById('leadModal')) closeModal();
+});
+
+// ══════════════════════════════════════════════════════
+//  WA TEMPLATES
+// ══════════════════════════════════════════════════════
+function getWaTemplate(l){
+  const t = WA_TEMPLATES[l.typeLabel] || WA_TEMPLATES['default'];
+  return t.replace(/{nombre}/g, l.name);
+}
+
+// ══════════════════════════════════════════════════════
+//  ACTIVITY LOG
+// ══════════════════════════════════════════════════════
+function logActivity(text, color='var(--acc)'){
+  activity.push({text, color, time: new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})});
+  if(activity.length>50) activity.shift();
+}
+
+// ══════════════════════════════════════════════════════
+//  SEARCH ENGINE (preserved from original)
+// ══════════════════════════════════════════════════════
+function setQ(v){document.getElementById('q').value=v;}
 function setR(v){
   searchRadius=v;
   ['300','500','1000','2000','5000','10000','25000','50000'].forEach(r=>{
@@ -275,422 +979,274 @@ function setR(v){
     if(el) el.classList.toggle('on', parseInt(r)===v);
   });
 }
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
 
-// ── DETECCIÓN DE CATEGORÍA ─────────────────────────────────────────
 function detectCat(text){
-  const t = text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  const t=text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
   for(const cat of CAT_MAP){
     for(const w of cat.words){
-      const wn = w.normalize('NFD').replace(/[̀-ͯ]/g,'');
+      const wn=w.normalize('NFD').replace(/[̀-ͯ]/g,'');
       if(t.includes(wn)) return cat;
     }
   }
   return null;
 }
 
-// ── BÚSQUEDA ──────────────────────────────────────────────────────
-async function buscar(){
-  const raw = document.getElementById('q').value.trim();
-  if(!raw) return alert('Escribe qué buscas y dónde. Ej: "restaurantes en Malasaña Madrid"');
-
-  const btn = document.getElementById('btn');
-  btn.disabled=true; btn.textContent='⏳ Buscando...';
-
-  setLayout(`
-    <div class="center">
-      <div class="spinner"></div>
-      <div class="load-step" id="ls">Analizando búsqueda...</div>
-      <div class="load-detail" id="ld"></div>
-    </div>
-  `);
-
-  try {
-    // 1. Geocodificar primero
-    const zoneText = limpiarZona(raw);
-    setLS(`📍 Localizando "${zoneText}"...`);
-    setLD('');
-    const coords = await geocodeNominatim(zoneText);
-    setLS(`📍 ${coords.display} · Iniciando búsqueda...`);
-
-    // 2. Detectar categoría
-    const cat = detectCat(raw);
-    const tags = cat ? cat.tags : ALL_BUSINESS_TAGS;
-    const label = cat ? cat.label : 'todos los negocios';
-
-    // 3. Lanzar búsquedas en paralelo con radios escalonados si hay pocos resultados
-    let allPlaces = [];
-    const radii = searchRadius <= 2000
-      ? [searchRadius, searchRadius*2, searchRadius*4]   // escala automática si radio pequeño
-      : [searchRadius];
-
-    for(const r of radii){
-      setLS(`🔍 Buscando ${label} sin web con teléfono... (radio ${r>=1000?r/1000+'km':r+'m'})`);
-      setLD('Filtrando directamente en OpenStreetMap: con teléfono + sin web');
-      const batch = await overpassQueryFiltered(coords.lat, coords.lon, tags, r);
-      // deduplicar
-      const seen = new Set(allPlaces.map(p=>`${p.type}/${p.id}`));
-      for(const p of batch) if(!seen.has(`${p.type}/${p.id}`)) allPlaces.push(p);
-      setLD(`${allPlaces.length} encontrados hasta ahora...`);
-      if(allPlaces.length >= 80) break; // suficientes, no seguimos expandiendo
-      if(r < radii[radii.length-1]) await sleep(500);
-    }
-
-    setLS(`✅ Procesando ${allPlaces.length} resultados...`);
-
-    // 4. Convertir a objetos de llamada
-    calls = [];
-    const sinTelef = [];
-    for(const p of allPlaces){
-      const t = p.tags||{};
-      const name = t.name||t['name:es']||''; if(!name) continue;
-      const phone = normalizePhone(t.phone||t['contact:phone']||t['phone:es']||t['contact:mobile']||t['phone:mobile']||'');
-      const waRaw = t['contact:whatsapp']||t['whatsapp']||'';
-      const waPhone = normalizePhone(waRaw) || (phone ? phone : ''); // si tiene wa:tag úsalo, si no usa el teléfono para verificar
-      const hasWaTag = !!waRaw; // confirmado por OSM
-      const addr = buildAddr(t);
-      const typeLabel = getTypeLabel(t);
-      const mapsUrl = `https://www.openstreetmap.org/${p.type}/${p.id}`;
-      const obj = {id:`${p.type}/${p.id}`, name, phone, waPhone, hasWaTag, address:addr, typeLabel, mapsUrl, status:'pending', waStatus:'unknown', notes:''};
-      if(phone) calls.push(obj);
-      else sinTelef.push(obj);
-    }
-    calls = [...calls, ...sinTelef];
-
-    if(!calls.length){
-      setLayout(`
-        <div class="center">
-          <div class="ico">😔</div>
-          <p>No se encontraron <strong>${label}</strong> sin web en esta zona.<br><br>
-          Prueba con un <strong>radio mayor</strong> o una zona diferente.<br>
-          También puedes probar sin especificar categoría: solo escribe la zona.</p>
-        </div>
-      `);
-      return;
-    }
-
-    ftab='all'; fq=''; soloTelef=true;
-    curIdx = calls.findIndex(c=>c.phone);
-    if(curIdx<0) curIdx=0;
-    renderAll();
-
-  } catch(e){
-    setLayout(`
-      <div class="center">
-        <div class="ico">❌</div>
-        <p><strong>Error:</strong> ${esc(e.message)}<br><br>
-        Comprueba que la zona exista. Ej: "restaurantes en Malasaña Madrid"</p>
-      </div>
-    `);
-  } finally {
-    btn.disabled=false; btn.textContent='🔍 Buscar';
-  }
-}
-
 function limpiarZona(text){
-  // Quitar palabras de categoría para quedarnos con la ubicación
-  let z = text;
-  // Quitar palabras de categoría conocidas
-  const catWords = CAT_MAP.flatMap(c=>c.words).sort((a,b)=>b.length-a.length);
+  let z=text;
+  const catWords=CAT_MAP.flatMap(c=>c.words).sort((a,b)=>b.length-a.length);
   for(const w of catWords){
-    const re = new RegExp('\\b'+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'s?\\b','gi');
-    z = z.replace(re,'');
+    const re=new RegExp('\\b'+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'s?\\b','gi');
+    z=z.replace(re,'');
   }
-  // Quitar preposiciones sueltas al principio
-  z = z.replace(/^\s*(en|de|del|la|las|los|el|a|cerca de|por)\s+/i,'').trim();
-  z = z.replace(/\s{2,}/g,' ').trim();
-  if(z.length < 3) z = text; // fallback
-  return z + ' España';
+  z=z.replace(/^\s*(en|de|del|la|las|los|el|a|cerca de|por)\s+/i,'').trim();
+  z=z.replace(/\s{2,}/g,' ').trim();
+  if(z.length<3) z=text;
+  return z+' España';
 }
 
-// ── GEOCODING — 3 servicios con fallback automático ──────────────
 async function geocodeNominatim(q){
-  // Quitar "España" si ya lo añadimos, para que Open-Meteo no se confunda
-  const qClean = q.replace(/\s*españa\s*$/i,'').trim();
-
-  // 1) Open-Meteo Geocoding (sin key, CORS perfecto)
-  try {
+  const qClean=q.replace(/\s*españa\s*$/i,'').trim();
+  try{
     const url=`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(qClean)}&count=10&language=es&format=json`;
     const r=await fetch(url);
-    if(r.ok){
-      const d=await r.json();
-      const results=(d.results||[]);
-      // Filtrar España (country_code ES) y ordenar
-      const es=results.filter(x=>x.country_code==='ES');
-      const hit=es[0]||results[0];
-      if(hit) return {lat:hit.latitude, lon:hit.longitude, display:`${hit.name}, ${hit.admin1||hit.country||''}`};
-    }
+    if(r.ok){const d=await r.json();const results=d.results||[];const es=results.filter(x=>x.country_code==='ES');const hit=es[0]||results[0];if(hit) return {lat:hit.latitude,lon:hit.longitude,display:`${hit.name}, ${hit.admin1||hit.country||''}`};}
   }catch(e){}
-
-  // 2) Photon (Komoot)
   try{
     const url=`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=5&lang=es`;
     const r=await fetch(url);
-    if(r.ok){
-      const d=await r.json();
-      const feats=(d.features||[]).sort((a,b)=>{
-        const aEs=(a.properties?.country||'').toLowerCase().includes('spa')?-1:1;
-        const bEs=(b.properties?.country||'').toLowerCase().includes('spa')?-1:1;
-        return aEs-bEs;
-      });
-      if(feats.length){
-        const f=feats[0]; const p=f.properties||{};
-        return {lat:f.geometry.coordinates[1], lon:f.geometry.coordinates[0],
-                display:[p.name,p.city||p.town,p.state].filter(Boolean).join(', ')};
-      }
-    }
+    if(r.ok){const d=await r.json();const feats=(d.features||[]).sort((a,b)=>{const aEs=(a.properties?.country||'').toLowerCase().includes('spa')?-1:1;const bEs=(b.properties?.country||'').toLowerCase().includes('spa')?-1:1;return aEs-bEs;});if(feats.length){const f=feats[0];const p=f.properties||{};return {lat:f.geometry.coordinates[1],lon:f.geometry.coordinates[0],display:[p.name,p.city||p.town,p.state].filter(Boolean).join(', ')};}}
   }catch(e){}
-
-  // 3) Nominatim (último recurso)
   try{
     const url=`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=3&countrycodes=es&accept-language=es`;
     const r=await fetch(url,{headers:{'Accept':'application/json'}});
-    if(r.ok){
-      const d=await r.json();
-      if(d.length) return {lat:parseFloat(d[0].lat), lon:parseFloat(d[0].lon),
-                           display:d[0].display_name.split(',').slice(0,2).join(',')};
-    }
+    if(r.ok){const d=await r.json();if(d.length) return {lat:parseFloat(d[0].lat),lon:parseFloat(d[0].lon),display:d[0].display_name.split(',').slice(0,2).join(',')};}
   }catch(e){}
-
-  throw new Error(`No encontré la zona "${qClean}". Prueba siendo más específico: "Gran Vía Madrid" o "barrio Gracia Barcelona".`);
+  throw new Error(`No encontré la zona "${qClean}". Prueba siendo más específico.`);
 }
 
-// ── OVERPASS API (gratis, sin key, varios servidores) ────────────
-const OVERPASS_SERVERS = [
+const OVERPASS_SERVERS=[
   'https://overpass-api.de/api/interpreter',
   'https://overpass.kumi.systems/api/interpreter',
   'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
 ];
 
-async function fetchWithTimeout(url, options, ms=8000){
-  const ctrl = new AbortController();
-  const timer = setTimeout(()=>ctrl.abort(), ms);
-  try{
-    const r = await fetch(url, {...options, signal: ctrl.signal});
-    clearTimeout(timer);
-    return r;
-  }catch(e){
-    clearTimeout(timer);
-    throw e;
-  }
+async function fetchWithTimeout(url,options,ms=8000){
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(),ms);
+  try{const r=await fetch(url,{...options,signal:ctrl.signal});clearTimeout(timer);return r;}catch(e){clearTimeout(timer);throw e;}
 }
 
-// Versión filtrada: pide SOLO los que tienen teléfono Y no tienen web
-// Mucho más eficiente — menos datos, más resultados útiles
-async function overpassQueryFiltered(lat, lon, tags, radius){
+async function overpassQueryFiltered(lat,lon,tags,radius){
   const around=`(around:${radius},${lat},${lon})`;
-
-  // Construimos dos bloques:
-  // A) con "phone" + sin "website"
-  // B) con "contact:phone" + sin "website"
-  let partsPhone=[], partsContactPhone=[];
+  let partsPhone=[],partsContactPhone=[];
   for(const tag of tags){
-    const base = `["${tag.k}"="${tag.v}"]${around}`;
+    const base=`["${tag.k}"="${tag.v}"]${around}`;
     partsPhone.push(`node${base}["phone"]["website"!~"."]["contact:website"!~"."];`);
     partsPhone.push(`way${base}["phone"]["website"!~"."]["contact:website"!~"."];`);
     partsContactPhone.push(`node${base}["contact:phone"]["website"!~"."]["contact:website"!~"."];`);
     partsContactPhone.push(`way${base}["contact:phone"]["website"!~"."]["contact:website"!~"."];`);
   }
-
-  const allParts = [...partsPhone, ...partsContactPhone];
+  const allParts=[...partsPhone,...partsContactPhone];
   const q=`[out:json][timeout:20];(${allParts.join('')});out center 500;`;
   const body='data='+encodeURIComponent(q);
-
-  for(let i=0; i<OVERPASS_SERVERS.length; i++){
+  for(let i=0;i<OVERPASS_SERVERS.length;i++){
     const server=OVERPASS_SERVERS[i];
     setLD(`Servidor ${i+1}/${OVERPASS_SERVERS.length}...`);
-    try{
-      const r=await fetchWithTimeout(server,{
-        method:'POST', body,
-        headers:{'Content-Type':'application/x-www-form-urlencoded'}
-      }, 15000);
-      if(!r.ok) continue;
-      const d=await r.json();
-      return d.elements||[];
-    }catch(e){ /* prueba siguiente */ }
+    try{const r=await fetchWithTimeout(server,{method:'POST',body,headers:{'Content-Type':'application/x-www-form-urlencoded'}},15000);if(!r.ok) continue;const d=await r.json();return d.elements||[];}catch(e){}
   }
   throw new Error('Los servidores de OpenStreetMap no responden. Inténtalo en unos segundos.');
 }
 
-// Versión sin filtro (fallback)
-async function overpassQuery(lat, lon, tags, radius){
-  const around=`(around:${radius},${lat},${lon})`;
-  let parts=[];
-  for(const tag of tags){
-    parts.push(`node["${tag.k}"="${tag.v}"]${around};`);
-    parts.push(`way["${tag.k}"="${tag.v}"]${around};`);
-  }
-  const q=`[out:json][timeout:20];(${parts.join('')});out center 500;`;
-  const body='data='+encodeURIComponent(q);
-  for(let i=0; i<OVERPASS_SERVERS.length; i++){
-    try{
-      const r=await fetchWithTimeout(OVERPASS_SERVERS[i],{method:'POST',body,headers:{'Content-Type':'application/x-www-form-urlencoded'}},15000);
-      if(!r.ok) continue;
-      const d=await r.json();
-      return d.elements||[];
-    }catch(e){}
-  }
-  throw new Error('Los servidores de OpenStreetMap no responden.');
-}
-
-// ── HELPERS DE DATOS ───────────────────────────────────────────────
 function normalizePhone(p){
   if(!p) return '';
-  p = p.trim().replace(/\s+/g,' ');
-  // Eliminar números claramente inválidos
-  if(p.replace(/\D/g,'').length < 7) return '';
+  p=p.trim().replace(/\s+/g,' ');
+  if(p.replace(/\D/g,'').length<7) return '';
   return p;
 }
 
 function buildAddr(t){
   const parts=[];
-  if(t['addr:street']){
-    let line=t['addr:street'];
-    if(t['addr:housenumber']) line+=' '+t['addr:housenumber'];
-    parts.push(line);
-  }
-  if(t['addr:city']||t['addr:town']||t['addr:village'])
-    parts.push(t['addr:city']||t['addr:town']||t['addr:village']);
+  if(t['addr:street']){let line=t['addr:street'];if(t['addr:housenumber']) line+=' '+t['addr:housenumber'];parts.push(line);}
+  if(t['addr:city']||t['addr:town']||t['addr:village']) parts.push(t['addr:city']||t['addr:town']||t['addr:village']);
   if(t['addr:postcode']) parts.push(t['addr:postcode']);
-  return parts.join(', ') || '';
+  return parts.join(', ')||'';
 }
 
-// ── RENDER ────────────────────────────────────────────────────────
-function renderAll(){
+async function buscar(){
+  const raw=document.getElementById('q').value.trim();
+  if(!raw) return alert('Escribe qué buscas y dónde. Ej: "restaurantes en Malasaña Madrid"');
+  const btn=document.getElementById('btn');
+  btn.disabled=true;btn.textContent='⏳ Buscando...';
+  setSearchBody(`<div class="center"><div class="spinner"></div><div class="load-step" id="ls">Analizando búsqueda...</div><div class="load-detail" id="ld"></div></div>`);
+  try{
+    const zoneText=limpiarZona(raw);
+    setLS(`📍 Localizando "${zoneText}"...`);setLD('');
+    const coords=await geocodeNominatim(zoneText);
+    setLS(`📍 ${coords.display} · Iniciando búsqueda...`);
+    const cat=detectCat(raw);
+    const tags=cat?cat.tags:ALL_BUSINESS_TAGS;
+    const label=cat?cat.label:'todos los negocios';
+    let allPlaces=[];
+    const radii=searchRadius<=2000?[searchRadius,searchRadius*2,searchRadius*4]:[searchRadius];
+    for(const r of radii){
+      setLS(`🔍 Buscando ${label} sin web con teléfono... (radio ${r>=1000?r/1000+'km':r+'m'})`);
+      setLD('Filtrando directamente en OpenStreetMap: con teléfono + sin web');
+      const batch=await overpassQueryFiltered(coords.lat,coords.lon,tags,r);
+      const seen=new Set(allPlaces.map(p=>`${p.type}/${p.id}`));
+      for(const p of batch) if(!seen.has(`${p.type}/${p.id}`)) allPlaces.push(p);
+      setLD(`${allPlaces.length} encontrados hasta ahora...`);
+      if(allPlaces.length>=80) break;
+      if(r<radii[radii.length-1]) await sleep(500);
+    }
+    setLS(`✅ Procesando ${allPlaces.length} resultados...`);
+    calls=[];
+    const sinTelef=[];
+    for(const p of allPlaces){
+      const t=p.tags||{};
+      const name=t.name||t['name:es']||'';if(!name) continue;
+      const phone=normalizePhone(t.phone||t['contact:phone']||t['phone:es']||t['contact:mobile']||t['phone:mobile']||'');
+      const waRaw=t['contact:whatsapp']||t['whatsapp']||'';
+      const waPhone=normalizePhone(waRaw)||(phone?phone:'');
+      const hasWaTag=!!waRaw;
+      const addr=buildAddr(t);
+      const typeLabel=getTypeLabel(t);
+      const mapsUrl=`https://www.openstreetmap.org/${p.type}/${p.id}`;
+      const existingLead=leads.find(l=>l.id===`${p.type}/${p.id}`);
+      const obj=existingLead||{id:`${p.type}/${p.id}`,name,phone,waPhone,hasWaTag,address:addr,typeLabel,mapsUrl,status:'pending',waStatus:'unknown',notes:'',stage:'nuevo',followUpDate:'',followUpNote:'',dealValue:0};
+      if(!existingLead){if(phone) calls.push(obj);else sinTelef.push(obj);}
+      else{if(phone) calls.push(obj);else sinTelef.push(obj);}
+    }
+    calls=[...calls,...sinTelef];
+    if(!calls.length){
+      setSearchBody(`<div class="center"><div class="ico">😔</div><p>No se encontraron <strong>${label}</strong> sin web en esta zona.<br><br>Prueba con un <strong>radio mayor</strong> o una zona diferente.</p></div>`);
+      return;
+    }
+    // Merge new leads into global CRM
+    let newCount=0;
+    for(const c of calls){
+      if(!leads.find(l=>l.id===c.id)){leads.push(c);newCount++;}
+    }
+    logActivity(`🔍 Búsqueda "${raw}" → <strong>${newCount}</strong> nuevos leads añadidos al CRM`, '#6366f1');
+    ftab='all';fq='';soloTelef=true;
+    curIdx=calls.findIndex(c=>c.phone);
+    if(curIdx<0) curIdx=0;
+    renderSearchResults();
+    renderDashboard();
+    setText('leadsCountBadge', leads.length);
+  }catch(e){
+    setSearchBody(`<div class="center"><div class="ico">❌</div><p><strong>Error:</strong> ${esc(e.message)}<br><br>Comprueba que la zona exista. Ej: "restaurantes en Malasaña Madrid"</p></div>`);
+  }finally{
+    btn.disabled=false;btn.textContent='🔍 Buscar leads';
+  }
+}
+
+function renderSearchResults(){
   const stats=getStats();
   const cur=calls[curIdx];
   const filtered=getFiltered();
-
   const html=`
-    <div class="call-area">
-      <div class="stats-bar">
-        <div class="sp"><div class="n">${calls.filter(c=>c.phone).length}</div><div class="l">📞 Con tel.</div></div>
-        <div class="sp"><div class="n ng">${stats.interested}</div><div class="l">Interesados</div></div>
-        <div class="sp"><div class="n ny">${stats.callback}</div><div class="l">Rellamar</div></div>
-        <div class="sp"><div class="n nr">${stats.no}</div><div class="l">No interesa</div></div>
-        <div class="sp"><div class="n nb">${stats.pending}</div><div class="l">Pendientes</div></div>
+    <div class="call-panel">
+      <div class="stats-strip">
+        <div class="ssp"><div class="n">${calls.filter(c=>c.phone).length}</div><div class="l">📞 Con tel.</div></div>
+        <div class="ssp"><div class="n ng">${stats.interested}</div><div class="l">Interesados</div></div>
+        <div class="ssp"><div class="n ny">${stats.callback}</div><div class="l">Rellamar</div></div>
+        <div class="ssp"><div class="n nr">${stats.no}</div><div class="l">No interesa</div></div>
+        <div class="ssp"><div class="n nb">${stats.pending}</div><div class="l">Pendientes</div></div>
       </div>
-      <div class="prog-bar-wrap">
+      <div class="prog-wrap">
         <span>${stats.done}/${calls.length}</span>
         <div class="prog-track"><div class="prog-fill" style="width:${calls.length?Math.round(stats.done/calls.length*100):0}%"></div></div>
         <span>${calls.length?Math.round(stats.done/calls.length*100):0}%</span>
       </div>
       <div class="cur-call">
-        ${cur ? callCard(cur) : '<div style="padding:10px;color:var(--muted);font-size:.85rem">✅ Todos procesados</div>'}
+        ${cur?callCard(cur):'<div style="padding:10px;color:var(--muted);font-size:.85rem">✅ Todos procesados — ve al Pipeline para continuar</div>'}
       </div>
     </div>
-    <div class="list-area">
+    <div class="list-panel">
       <div class="list-top">
         <input class="list-search" placeholder="🔍 Filtrar por nombre o teléfono..." oninput="fq=this.value;renderList()" value="${esc(fq)}">
         <div class="tabs">
-          <div class="tab ${soloTelef?'on':''}" onclick="soloTelef=!soloTelef;renderList()">
-            📞 ${soloTelef?'Con tel.':'Todos'}
-          </div>
-          <div class="tab ${ftabWa?'on':''}" style="${ftabWa?'background:#064e3b;border-color:#10b981;color:#6ee7b7':''}"
-               onclick="ftabWa=!ftabWa;renderList()">
-            💬 Con WA
-          </div>
-          ${[['all','Todos'],['pending','⏳'],['interested','✅'],['callback','🔄'],['no','❌']].map(([k,l])=>
-            `<div class="tab ${ftab===k?'on':''}" onclick="ftab='${k}';renderList()">${l}</div>`
-          ).join('')}
+          <div class="tab ${soloTelef?'on':''}" onclick="soloTelef=!soloTelef;renderList()">📞 ${soloTelef?'Con tel.':'Todos'}</div>
+          <div class="tab ${ftabWa?'on':''}" style="${ftabWa?'background:#064e3b;border-color:#10b981;color:#6ee7b7':''}" onclick="ftabWa=!ftabWa;renderList()">💬 Con WA</div>
+          ${[['all','Todos'],['pending','⏳'],['interested','✅'],['callback','🔄'],['no','❌']].map(([k,l])=>`<div class="tab ${ftab===k?'on':''}" onclick="ftab='${k}';renderList()">${l}</div>`).join('')}
         </div>
       </div>
       <div class="list-scroll" id="listScroll">${listHTML(filtered)}</div>
       <div class="bottom-bar">
-        <button class="bb-btn" onclick="exportCSV()">⬇️ CSV</button>
-        <button class="bb-btn" onclick="exportCSV(calls.filter(c=>c.status==='interested'))">⬇️ Interesados</button>
-        <button class="bb-btn" onclick="exportCSV(calls.filter(c=>c.waStatus==='yes'||c.hasWaTag))" style="color:#4ade80;border-color:#166534">💬 CSV con WA</button>
-        <button class="bb-btn" id="waScanBtn" onclick="toggleWaPanel()" style="color:#4ade80;border-color:#166534">🤖 Auto-verificar WA</button>
+        <button class="bb-btn" onclick="exportCSV()">⬇️ CSV todos</button>
+        <button class="bb-btn" onclick="goView('pipeline')" style="color:#a5b4fc;border-color:var(--acc)">🏆 Ver Pipeline</button>
+        <button class="bb-btn" id="waScanBtn" onclick="toggleWaPanel()" style="color:#4ade80;border-color:#166534">🤖 Auto-WA</button>
       </div>
-      <!-- PANEL IA WHATSAPP -->
-      <div id="waPanel" style="display:none;background:#020c06;border-top:2px solid #16a34a;padding:14px;flex-shrink:0">
-        <div style="font-size:.75rem;font-weight:700;color:#4ade80;margin-bottom:10px">🤖 Verificador automático de WhatsApp</div>
-        <div id="waServerStatus" style="font-size:.75rem;color:var(--muted);margin-bottom:10px">Comprobando servidor local...</div>
-        <div id="waQrBox" style="display:none;margin-bottom:10px"></div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <div id="waPanel" style="display:none;background:#020c06;border-top:2px solid #16a34a;padding:12px;flex-shrink:0">
+        <div style="font-size:.72rem;font-weight:700;color:#4ade80;margin-bottom:8px">🤖 Verificador automático de WhatsApp</div>
+        <div id="waServerStatus" style="font-size:.72rem;color:var(--muted);margin-bottom:8px">Comprobando servidor local...</div>
+        <div id="waQrBox" style="display:none;margin-bottom:8px"></div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
           <button class="bb-btn" style="color:#4ade80;border-color:#166534" onclick="autoCheckAll()">▶️ Verificar todos</button>
           <button class="bb-btn" style="color:#4ade80;border-color:#166534" onclick="autoCheckPending()">⏳ Solo pendientes</button>
           <button class="bb-btn" onclick="checkWaServer()">🔄 Reconectar</button>
         </div>
-        <div id="waProgress" style="margin-top:8px;font-size:.72rem;color:var(--muted)"></div>
+        <div id="waProgress" style="margin-top:6px;font-size:.7rem;color:var(--muted)"></div>
       </div>
     </div>
   `;
-  setLayout(html);
+  setSearchBody(html);
 }
 
 function callCard(c){
-  const hasPhone = !!c.phone;
+  const hasPhone=!!c.phone;
+  const sc=calcScore(c);
+  const idx=leads.findIndex(l=>l.id===c.id);
   return `
-    <div class="cc-num">#${curIdx+1} de ${calls.length} &nbsp;·&nbsp; ${esc(c.typeLabel)} &nbsp;·&nbsp; ❌ Sin web</div>
+    <div class="cc-num">#${curIdx+1} de ${calls.length} · ${esc(c.typeLabel)} · ❌ Sin web · <span class="${scoreColor(sc)}" style="font-weight:700">${sc}pts</span></div>
     <div class="cc-name">${esc(c.name)}</div>
-    ${c.address ? `<div class="cc-addr">📍 ${esc(c.address)}</div>` : ''}
-
+    ${c.address?`<div class="cc-addr">📍 ${esc(c.address)}</div>`:''}
     ${hasPhone
-      ? `<div class="cc-phone"><a href="tel:${esc(c.phone.replace(/\D/g,''))}">${esc(c.phone)}</a></div>
-         <div style="font-size:.72rem;color:var(--faint);margin:-10px 0 10px">Toca para llamar</div>`
-      : `<div style="background:#1e293b;border:1px dashed var(--b);border-radius:8px;padding:10px;margin-bottom:10px;color:var(--faint);font-size:.8rem">
-           📵 Sin teléfono — busca en Google: <strong>${esc(c.name)}</strong>
-         </div>`
-    }
-
-    <!-- BLOQUE WHATSAPP -->
-    ${c.waPhone ? `
+      ?`<div class="cc-phone"><a href="tel:${esc(c.phone.replace(/\D/g,''))}">${esc(c.phone)}</a></div><div style="font-size:.7rem;color:var(--faint);margin:-8px 0 8px">Toca para llamar</div>`
+      :`<div style="background:#1e293b;border:1px dashed var(--b);border-radius:8px;padding:8px;margin-bottom:8px;color:var(--faint);font-size:.78rem">📵 Sin teléfono</div>`}
+    ${c.waPhone?`
     <div class="wa-box ${c.waStatus==='yes'?'confirmed':c.waStatus==='no'?'no-wa':''}">
       <div style="flex:1;min-width:0">
-        <div style="font-size:.68rem;color:#86efac;margin-bottom:3px">
-          WhatsApp ${c.hasWaTag?'<span class="wa-tag">✓ Confirmado por OSM</span>':'— toca para verificar'}
-        </div>
-        <div class="wa-phone">${esc(c.waPhone)}</div>
+        <div style="font-size:.65rem;color:#86efac;margin-bottom:2px">WhatsApp ${c.hasWaTag?'<span style="background:#14532d;color:#86efac;padding:1px 6px;border-radius:10px;font-size:.6rem;font-weight:700">✓ OSM</span>':''}</div>
+        <div style="font-size:1rem;font-weight:800;color:#4ade80">${esc(c.waPhone)}</div>
       </div>
-      <a class="btn-wa" href="https://wa.me/${waNum(c.waPhone)}" target="_blank">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Abrir WA
-      </a>
-      ${c.waStatus==='unknown' ? `
-        <button class="btn-wa-confirm" onclick="setWa(${curIdx},'yes')">✅ Tiene WA</button>
-        <button class="btn-wa-no" onclick="setWa(${curIdx},'no')">✗ No tiene</button>
-      ` : c.waStatus==='yes'
-        ? `<span style="color:#4ade80;font-size:.8rem;font-weight:700">✅ Confirmado</span>`
-        : `<span style="color:var(--faint);font-size:.78rem">✗ Sin WA</span>`
-      }
-    </div>` : ''}
-
+      <a class="btn-wa" href="https://wa.me/${waNum(c.waPhone)}?text=${encodeURIComponent(getWaTemplate(c))}" target="_blank">💬 WA</a>
+      ${c.waStatus==='unknown'?`<button class="btn-wa-confirm" onclick="setWa(${curIdx},'yes')">✅</button><button class="btn-wa-no" onclick="setWa(${curIdx},'no')">✗</button>`:c.waStatus==='yes'?`<span style="color:#4ade80;font-size:.78rem;font-weight:700">✅</span>`:`<span style="color:var(--faint);font-size:.75rem">✗</span>`}
+    </div>`:''
+    }
     <div class="act-grid">
-      <button class="a a1" onclick="mark('interested')"><span class="i">✅</span>Interesado</button>
-      <button class="a a2" onclick="mark('callback')"><span class="i">🔄</span>Rellamar</button>
-      <button class="a a3" onclick="mark('no')"><span class="i">❌</span>No interesa</button>
-      <button class="a a4" onclick="mark('skip')"><span class="i">⏭️</span>Siguiente</button>
+      <button class="a a1" onclick="mark('interested')"><span>✅</span>Interesado</button>
+      <button class="a a2" onclick="mark('callback')"><span>🔄</span>Rellamar</button>
+      <button class="a a3" onclick="mark('no')"><span>❌</span>No interesa</button>
+      <button class="a a4" onclick="mark('skip')"><span>⏭️</span>Siguiente</button>
     </div>
-    <div class="notes-row" style="margin-top:10px">
+    <div class="notes-row" style="margin-top:8px">
       <textarea class="notes-inp" rows="2" placeholder="Notas: nombre, qué dijo, cuándo rellamar..."
         onchange="calls[${curIdx}].notes=this.value">${esc(c.notes)}</textarea>
       <a class="maps-link" href="${esc(c.mapsUrl)}" target="_blank">🗺️<br>Ver</a>
     </div>
+    ${idx>=0?`<button style="margin-top:8px;width:100%;background:#1e1b4b;border:1px solid var(--acc);color:#a5b4fc;border-radius:8px;padding:7px;font-size:.75rem;cursor:pointer" onclick="openModal(${idx})">✏️ Abrir en CRM — ver pipeline & seguimiento</button>`:''}
   `;
 }
 
-function waNum(p){ return p.replace(/\D/g,'').replace(/^0034/,'34').replace(/^0/,'34'); }
-function setWa(i, status){ calls[i].waStatus=status; renderAll(); }
+function waNum(p){return p.replace(/\D/g,'').replace(/^0034/,'34').replace(/^0/,'34');}
+function setWa(i,status){calls[i].waStatus=status;const lead=leads.find(l=>l.id===calls[i].id);if(lead) lead.waStatus=status;renderSearchResults();}
 
 function listHTML(list){
-  if(!list.length) return '<div style="text-align:center;color:var(--faint);padding:30px;font-size:.78rem">Sin resultados</div>';
+  if(!list.length) return '<div style="text-align:center;color:var(--faint);padding:30px;font-size:.75rem">Sin resultados</div>';
   return list.map(c=>{
     const i=calls.indexOf(c);
-    const dc={'pending':'dp','interested':'di','callback':'dc','no':'dn','skip':'ds','wa':'dot-wa'}[c.status]||'dp';
-    const waIcon = (c.waStatus==='yes'||c.hasWaTag) ? '<span class="wa-badge">WA</span>' : '';
-    return `
-      <div class="li ${i===curIdx?'cur':''}" onclick="jumpTo(${i})">
-        <span class="li-n">${i+1}</span>
-        <span class="dot ${(c.waStatus==='yes'||c.hasWaTag)?'dot-wa':dc}"></span>
-        <div class="li-info">
-          <div class="li-nm">${esc(c.name)}${waIcon}</div>
-          <div class="li-ad">${esc(c.address)||c.typeLabel}</div>
-        </div>
-        <span class="li-ph">${esc(c.phone)}</span>
+    const dc={'pending':'dp','interested':'di','callback':'dc','no':'dn','skip':'ds'}[c.status]||'dp';
+    const waIcon=(c.waStatus==='yes'||c.hasWaTag)?'<span class="wa-badge">WA</span>':'';
+    return `<div class="li ${i===curIdx?'cur':''}" onclick="jumpTo(${i})">
+      <span class="li-n">${i+1}</span>
+      <span class="dot ${(c.waStatus==='yes'||c.hasWaTag)?'dwa':dc}"></span>
+      <div class="li-info">
+        <div class="li-nm">${esc(c.name)}${waIcon}</div>
+        <div class="li-ad">${esc(c.address)||c.typeLabel}</div>
       </div>
-    `;
+      <span class="li-ph">${esc(c.phone)}</span>
+    </div>`;
   }).join('');
 }
 
@@ -699,167 +1255,160 @@ function renderList(){
   if(el) el.innerHTML=listHTML(getFiltered());
 }
 
-// ── ACCIONES ──────────────────────────────────────────────────────
 function mark(st){
   if(!calls[curIdx]) return;
   calls[curIdx].status=st;
+  // Map to pipeline stage
+  const stageMap={interested:'interesado',callback:'contactado',no:'no',skip:'nuevo'};
+  const newStage=stageMap[st]||'nuevo';
+  const lead=leads.find(l=>l.id===calls[curIdx].id);
+  if(lead&&lead.stage==='nuevo') lead.stage=newStage;
+  if(st==='interested') logActivity(`✅ <strong>${esc(calls[curIdx].name)}</strong> marcado como interesado`,'#10b981');
   const next=findNext(curIdx+1);
   if(next!==-1) curIdx=next;
-  renderAll();
+  renderSearchResults();
   setTimeout(()=>document.querySelector('.li.cur')?.scrollIntoView({block:'nearest'}),50);
 }
 
-function jumpTo(i){ curIdx=i; renderAll(); }
-
+function jumpTo(i){curIdx=i;renderSearchResults();}
 function findNext(from){
   for(let i=from;i<calls.length;i++) if(calls[i].status==='pending') return i;
   for(let i=0;i<from;i++) if(calls[i].status==='pending') return i;
   return from<calls.length?from:calls.length-1;
 }
-
 function getStats(){
   const s={pending:0,interested:0,callback:0,no:0,skip:0,done:0};
   calls.forEach(c=>s[c.status]=(s[c.status]||0)+1);
-  s.done=calls.length-s.pending;
-  return s;
+  s.done=calls.length-s.pending;return s;
 }
-
 function getFiltered(){
   return calls.filter(c=>{
-    if(soloTelef && !c.phone) return false;
-    if(ftabWa && c.waStatus!=='yes' && !c.hasWaTag) return false;
+    if(soloTelef&&!c.phone) return false;
+    if(ftabWa&&c.waStatus!=='yes'&&!c.hasWaTag) return false;
     if(ftab!=='all'&&c.status!==ftab) return false;
     if(fq){const q=fq.toLowerCase();return c.name.toLowerCase().includes(q)||c.phone.includes(q)||(c.address||'').toLowerCase().includes(q);}
     return true;
   });
 }
 
-// ── LAYOUT ────────────────────────────────────────────────────────
-function setLayout(html){document.getElementById('layout').innerHTML=html}
-function setLS(t){const e=document.getElementById('ls');if(e)e.textContent=t}
-function setLD(t){const e=document.getElementById('ld');if(e)e.textContent=t}
+function syncLeadsFromCalls(){
+  // ensure any status changes in search panel are reflected in leads
+  for(const c of calls){
+    const l=leads.find(x=>x.id===c.id);
+    if(l){l.notes=c.notes;l.waStatus=c.waStatus;}
+  }
+}
 
-// ── VERIFICADOR WHATSAPP AUTOMÁTICO ───────────────────────────────
-const WA_SERVER = 'http://localhost:3333';
-let waServerOk = false;
-let waChecking = false;
+// ══════════════════════════════════════════════════════
+//  LAYOUT HELPERS
+// ══════════════════════════════════════════════════════
+function setSearchBody(html){
+  const el=document.getElementById('searchBody');
+  if(el) el.innerHTML=html;
+}
+function setLS(t){const e=document.getElementById('ls');if(e)e.textContent=t;}
+function setLD(t){const e=document.getElementById('ld');if(e)e.textContent=t;}
+function setText(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// ══════════════════════════════════════════════════════
+//  WA CHECKER (local server)
+// ══════════════════════════════════════════════════════
+const WA_SERVER='http://localhost:3333';
+let waServerOk=false;
+let waChecking=false;
 
 async function checkWaServer(){
-  const el = document.getElementById('waServerStatus');
-  if(!el) return;
-  try {
-    const r = await fetch(WA_SERVER+'/status', {signal: AbortSignal.timeout(3000)});
-    const d = await r.json();
-    if(d.ready){
-      waServerOk = true;
-      el.innerHTML = '<span style="color:#4ade80">✅ WhatsApp conectado y listo</span>';
-      document.getElementById('waQrBox').style.display = 'none';
-    } else if(d.hasQr){
-      waServerOk = false;
-      el.innerHTML = '<span style="color:#fbbf24">📱 Escanea el QR con tu WhatsApp:</span>';
-      loadQr();
-    } else {
-      waServerOk = false;
-      el.innerHTML = '<span style="color:#fbbf24">⏳ Iniciando WhatsApp... espera unos segundos</span>';
-      setTimeout(checkWaServer, 3000);
-    }
-  } catch(e){
-    waServerOk = false;
-    el.innerHTML = `<span style="color:#f87171">❌ Servidor no encontrado.</span>
-      <div style="margin-top:6px;color:var(--faint);line-height:1.7">
-        Abre una terminal en la carpeta <code style="background:#1e293b;padding:1px 5px;border-radius:4px">wa-checker</code> y ejecuta:<br>
-        <code style="background:#1e293b;padding:3px 8px;border-radius:4px;color:#a5b4fc">npm install</code> (solo la primera vez)<br>
-        <code style="background:#1e293b;padding:3px 8px;border-radius:4px;color:#a5b4fc">node server.js</code>
-      </div>`;
+  const el=document.getElementById('waServerStatus');if(!el) return;
+  try{
+    const r=await fetch(WA_SERVER+'/status',{signal:AbortSignal.timeout(3000)});
+    const d=await r.json();
+    if(d.ready){waServerOk=true;el.innerHTML='<span style="color:#4ade80">✅ WhatsApp conectado y listo</span>';document.getElementById('waQrBox').style.display='none';}
+    else if(d.hasQr){waServerOk=false;el.innerHTML='<span style="color:#fbbf24">📱 Escanea el QR:</span>';loadQr();}
+    else{waServerOk=false;el.innerHTML='<span style="color:#fbbf24">⏳ Iniciando WhatsApp...</span>';setTimeout(checkWaServer,3000);}
+  }catch(e){
+    waServerOk=false;
+    el.innerHTML=`<span style="color:#f87171">❌ Servidor no encontrado.</span><div style="margin-top:5px;color:var(--faint);font-size:.68rem;line-height:1.7">Abre una terminal en <code style="background:#1e293b;padding:1px 4px;border-radius:3px">wa-checker</code> y ejecuta: <code style="color:#a5b4fc">node server.js</code></div>`;
   }
 }
 
 async function loadQr(){
-  try {
-    const r = await fetch(WA_SERVER+'/qr', {signal: AbortSignal.timeout(3000)});
-    const d = await r.json();
-    const box = document.getElementById('waQrBox');
-    if(!box) return;
-    if(d.ready){ checkWaServer(); return; }
+  try{
+    const r=await fetch(WA_SERVER+'/qr',{signal:AbortSignal.timeout(3000)});
+    const d=await r.json();
+    const box=document.getElementById('waQrBox');if(!box) return;
+    if(d.ready){checkWaServer();return;}
     if(d.qr){
-      box.style.display = 'block';
-      // Mostrar QR usando una librería CDN
-      box.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(d.qr)}"
-        style="border-radius:8px;border:3px solid #16a34a" alt="QR WhatsApp">
-        <div style="font-size:.68rem;color:var(--faint);margin-top:4px">Abre WhatsApp → Dispositivos vinculados → Vincular dispositivo</div>`;
-      // Polling hasta que se conecte
-      setTimeout(checkWaServer, 5000);
-    } else {
-      setTimeout(loadQr, 2000);
-    }
-  } catch(e){}
+      box.style.display='block';
+      box.innerHTML=`<img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(d.qr)}" style="border-radius:6px;border:2px solid #16a34a" alt="QR"><div style="font-size:.65rem;color:var(--faint);margin-top:3px">WhatsApp → Dispositivos vinculados → Vincular</div>`;
+      setTimeout(checkWaServer,5000);
+    }else{setTimeout(loadQr,2000);}
+  }catch(e){}
 }
 
 function toggleWaPanel(){
-  const panel = document.getElementById('waPanel');
-  if(!panel) return;
-  const visible = panel.style.display !== 'none';
-  panel.style.display = visible ? 'none' : 'block';
+  const panel=document.getElementById('waPanel');if(!panel) return;
+  const visible=panel.style.display!=='none';
+  panel.style.display=visible?'none':'block';
   if(!visible) checkWaServer();
 }
 
-async function autoCheckAll(){ await runWaCheck(calls.filter(c=>c.phone)); }
-async function autoCheckPending(){ await runWaCheck(calls.filter(c=>c.phone && c.waStatus==='unknown')); }
+async function autoCheckAll(){await runWaCheck(calls.filter(c=>c.phone));}
+async function autoCheckPending(){await runWaCheck(calls.filter(c=>c.phone&&c.waStatus==='unknown'));}
 
 async function runWaCheck(targets){
   if(waChecking) return;
-  if(!waServerOk) return alert('El servidor WhatsApp no está conectado. Sigue las instrucciones del panel.');
+  if(!waServerOk) return alert('El servidor WhatsApp no está conectado.');
   if(!targets.length) return alert('No hay números para verificar.');
-
-  waChecking = true;
-  const prog = document.getElementById('waProgress');
-  let done=0, found=0;
-
-  // Procesar en lotes de 20
-  const BATCH = 20;
-  for(let i=0; i<targets.length; i+=BATCH){
-    const batch = targets.slice(i, i+BATCH);
-    const phones = batch.map(c=>c.waPhone||c.phone);
-    if(prog) prog.textContent = `Verificando ${done}/${targets.length}... (${found} con WhatsApp)`;
-    try {
-      const r = await fetch(WA_SERVER+'/check-batch', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({phones}),
-        signal: AbortSignal.timeout(30000)
-      });
-      const d = await r.json();
-      for(let j=0; j<batch.length; j++){
-        const phone = phones[j];
-        const hasWa = d.results[phone];
-        if(hasWa === true){ batch[j].waStatus='yes'; found++; }
-        else if(hasWa === false){ batch[j].waStatus='no'; }
+  waChecking=true;
+  const prog=document.getElementById('waProgress');
+  let done=0,found=0;
+  const BATCH=20;
+  for(let i=0;i<targets.length;i+=BATCH){
+    const batch=targets.slice(i,i+BATCH);
+    const phones=batch.map(c=>c.waPhone||c.phone);
+    if(prog) prog.textContent=`Verificando ${done}/${targets.length}... (${found} con WhatsApp)`;
+    try{
+      const r=await fetch(WA_SERVER+'/check-batch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phones}),signal:AbortSignal.timeout(30000)});
+      const d=await r.json();
+      for(let j=0;j<batch.length;j++){
+        const phone=phones[j];const hasWa=d.results[phone];
+        if(hasWa===true){batch[j].waStatus='yes';const l=leads.find(x=>x.id===batch[j].id);if(l) l.waStatus='yes';found++;}
+        else if(hasWa===false){batch[j].waStatus='no';const l=leads.find(x=>x.id===batch[j].id);if(l) l.waStatus='no';}
         done++;
       }
-    } catch(e){
-      if(prog) prog.textContent = `Error en lote: ${e.message}`;
-    }
+    }catch(e){if(prog) prog.textContent=`Error: ${e.message}`;}
     renderList();
     await sleep(500);
   }
-
-  waChecking = false;
-  if(prog) prog.innerHTML = `<span style="color:#4ade80">✅ Verificación completa: <strong>${found}</strong> de ${targets.length} tienen WhatsApp</span>`;
-  renderAll();
+  waChecking=false;
+  if(prog) prog.innerHTML=`<span style="color:#4ade80">✅ ${found} de ${targets.length} tienen WhatsApp</span>`;
+  renderSearchResults();
 }
 
-// ── EXPORT ────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════
+//  EXPORT
+// ══════════════════════════════════════════════════════
 function exportCSV(list){
-  const data=list||calls;
+  const data=list||leads;
   if(!data.length) return alert('Sin resultados para exportar');
-  const rows=[['Nombre','Teléfono','WhatsApp','WA Confirmado','Dirección','Tipo','Estado','Notas','OpenStreetMap']];
-  data.forEach(c=>rows.push([c.name,c.phone,c.waPhone||'',c.waStatus==='yes'||c.hasWaTag?'Sí':'',c.address,c.typeLabel,c.status,c.notes,c.mapsUrl]));
+  const rows=[['Nombre','Teléfono','WhatsApp','WA Confirmado','Dirección','Tipo','Etapa','Puntuación','Seguimiento','Valor','Notas','OpenStreetMap']];
+  data.forEach(l=>{
+    const sc=calcScore(l);
+    rows.push([l.name,l.phone,l.waPhone||'',l.waStatus==='yes'||l.hasWaTag?'Sí':'',l.address,l.typeLabel,l.stage||'nuevo',sc,l.followUpDate||'',l.dealValue||'',l.notes,l.mapsUrl]);
+  });
   const csv=rows.map(r=>r.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'}));
-  a.download=`llamadas_${new Date().toISOString().slice(0,10)}.csv`;
+  a.download=`leadpro_${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
 }
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+renderDashboard();
 </script>
 </body>
 </html>
