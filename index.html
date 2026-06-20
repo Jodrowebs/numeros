@@ -1208,12 +1208,17 @@ function osmToLead(el){
   const lon=el.lon||(el.center&&el.center.lon)||0;
   const typeMap={'restaurant':'Restaurante','bar':'Bar','pub':'Bar/Pub','cafe':'Cafetería','hairdresser':'Peluquería','fitness_centre':'Gimnasio','gym':'Gimnasio','car_repair':'Taller mecánico','dentist':'Dentista','hotel':'Hotel','veterinary':'Veterinario','beauty':'Estética','bakery':'Panadería','plumber':'Fontanero','electrician':'Electricista','pharmacy':'Farmacia','optician':'Óptica'};
   const amenity=t.amenity||t.shop||t.craft||'';
+  const instagram=t['contact:instagram']||t['instagram']||'';
+  const facebook=t['contact:facebook']||t['facebook']||'';
+  const phone=t.phone||t['contact:phone']||t['phone:mobile']||'';
   return {
     id: el.type+'/'+el.id,
     name: t.name||t['name:es']||'Sin nombre',
-    phone: t.phone||t['contact:phone']||t['phone:mobile']||'',
-    waPhone: t.phone||t['contact:phone']||'',
+    phone,
+    waPhone: phone,
     hasWaTag: !!(t.contact_whatsapp||t['contact:whatsapp']),
+    instagram,
+    facebook,
     address: [t['addr:street'],t['addr:housenumber'],t['addr:city']].filter(Boolean).join(', '),
     typeLabel: typeMap[amenity]||amenity||'Negocio',
     mapsUrl: `https://www.openstreetmap.org/${el.type}/${el.id}`,
@@ -1221,7 +1226,7 @@ function osmToLead(el){
     status:'pending',waStatus:'unknown',notes:'',stage:'nuevo',
     followUpDate:'',followUpNote:'',dealValue:0,
     lastContact:'',contactHistory:[],
-    hasWeb:false,hasSocialMedia:false,fewReviews:false,
+    hasWeb:false,hasSocialMedia:!!(instagram||facebook),fewReviews:false,
     webStatus:'sin-web',commercialStatus:'pendiente',
     addedAt: new Date().toISOString()
   };
@@ -1262,11 +1267,12 @@ async function buscar(){
       showCallArea('<div class="center" style="height:200px"><div class="spinner"></div><div class="text-muted text-xs mt-3">Buscando todos los negocios del tipo...</div></div>');
       broadElements = await overpassQuery(geo.lat,geo.lon,tags,Math.max(rad*5,5000),false);
     }
-    // Convertir a leads — los estrictos primero, luego los amplios que tengan teléfono
+    // Convertir a leads
     const strictLeads = elements.map(osmToLead);
-    const broadLeads = broadElements.map(osmToLead).filter(l=>l.phone && !strictLeads.find(s=>s.id===l.id));
-    calls = [...strictLeads, ...broadLeads].filter(l=>l.phone||l.name!=='Sin nombre');
-    // Ordenar: primero con teléfono, luego sin teléfono
+    const broadLeads = broadElements.map(osmToLead).filter(l=>!strictLeads.find(s=>s.id===l.id));
+    // Solo mostrar: tienen teléfono O tienen instagram/facebook (para poder contactar)
+    calls = [...strictLeads, ...broadLeads].filter(l=>l.phone||l.instagram||l.facebook);
+    // Ordenar: primero con teléfono, luego solo redes sociales
     calls.sort((a,b)=>(b.phone?1:0)-(a.phone?1:0));
     // Merge into leads CRM
     let added=0;
@@ -1279,11 +1285,12 @@ async function buscar(){
     renderCallCard();
     updateBadges();
     const withPhone = calls.filter(c=>c.phone).length;
+    const withInsta = calls.filter(c=>!c.phone&&c.instagram).length;
     if(calls.length===0){
       showCallArea('<div class="center" style="height:250px"><div class="ico">🏙️</div><strong>Sin resultados para esta búsqueda</strong><span class="text-sm">Prueba con un radio mayor, otra ciudad cercana,<br>o una categoría diferente</span></div>');
       toast('Sin resultados. Prueba con otro radio o ciudad.','error');
     } else {
-      toast(`✅ ${withPhone} negocios con teléfono encontrados`);
+      toast(`✅ ${withPhone} con teléfono${withInsta>0?' · '+withInsta+' solo Instagram':''}`);
     }
   }catch(e){
     showCallArea('<div class="center" style="height:200px"><div class="ico">⚠️</div><strong style="color:var(--red-text)">Error en la búsqueda</strong><span class="text-sm">'+e.message+'<br>Comprueba tu conexión a internet</span></div>');
@@ -1411,8 +1418,13 @@ function renderCallCard(){
     </div>
     <div class="cc-name">${l.name}</div>
     <div class="cc-addr">📍 ${l.address||'Sin dirección'}</div>
-    <div class="cc-phone"><a href="tel:${l.phone}">${l.phone}</a></div>
-    <div class="cc-phone-hint">Toca para llamar · ${l.hasWaTag?'✅ WA confirmado por OSM':'WhatsApp no verificado'}</div>
+    ${l.phone
+      ? `<div class="cc-phone"><a href="tel:${l.phone}">${l.phone}</a></div>
+         <div class="cc-phone-hint">Toca para llamar · ${l.hasWaTag?'✅ WA confirmado':'WhatsApp no verificado'}</div>`
+      : `<div class="cc-phone" style="font-size:16px;color:var(--text2)">Sin teléfono en OSM</div>
+         <div class="cc-phone-hint">Contacta por Instagram o búscalos en Google</div>`}
+    ${l.instagram?`<a href="https://instagram.com/${l.instagram.replace(/[@\/]/g,'')}" target="_blank" class="btn btn-secondary btn-sm mt-1" style="text-decoration:none;color:#e1306c;border-color:#e1306c">📸 Instagram: @${l.instagram.replace(/[@\/]/g,'')}</a>`:''}
+    ${l.facebook?`<a href="${l.facebook.startsWith('http')?l.facebook:'https://facebook.com/'+l.facebook}" target="_blank" class="btn btn-secondary btn-sm mt-1" style="text-decoration:none;color:#1877f2;border-color:#1877f2">👤 Facebook</a>`:''}
     ${waHtml}
     <div class="act-grid">
       <button class="act-btn act-interested" onclick="markStatus('interested')">✅<span>Interesado</span></button>
