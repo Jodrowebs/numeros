@@ -540,6 +540,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       <span class="sb-item-text">Configuración</span>
     </button>
+    <div class="sb-group" style="margin-top:8px">EMPRESA</div>
+    <button class="sb-item" id="sb-about" onclick="goTo('about')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span class="sb-item-text">Sobre nosotros</span>
+    </button>
+    <button class="sb-item" id="sb-contact" onclick="goTo('contact')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <span class="sb-item-text">Contacto</span>
+    </button>
   </nav>
   <div class="sb-footer">
     <button class="sb-theme" onclick="toggleTheme()">
@@ -703,8 +712,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="footer-grid">
             <div><div class="footer-brand">LeadPro</div><p class="footer-brand-sub">La plataforma de captación de clientes para agencias web y freelancers. Encuentra negocios sin web y cierra más ventas.</p></div>
             <div><div class="footer-col-title">Plataforma</div><span class="footer-link" onclick="goTo('dashboard')">Dashboard</span><span class="footer-link" onclick="goTo('pipeline')">Pipeline</span><span class="footer-link" onclick="goTo('search')">Buscar leads</span><span class="footer-link" onclick="goTo('ai')">IA Analytics</span></div>
-            <div><div class="footer-col-title">Empresa</div><span class="footer-link" onclick="goTo('pricing')">Precios</span><span class="footer-link" onclick="goTo('blog')">Blog</span><span class="footer-link">Sobre nosotros</span><span class="footer-link">Contacto</span></div>
-            <div><div class="footer-col-title">Legal</div><span class="footer-link">Privacidad</span><span class="footer-link">Términos de uso</span><span class="footer-link">Aviso legal</span><span class="footer-link">Seguridad</span></div>
+            <div><div class="footer-col-title">Empresa</div><span class="footer-link" onclick="goTo('pricing')">Precios</span><span class="footer-link" onclick="goTo('blog')">Blog</span><span class="footer-link" onclick="goTo('about')">Sobre nosotros</span><span class="footer-link" onclick="goTo('contact')">Contacto</span></div>
+            <div><div class="footer-col-title">Legal</div><span class="footer-link" onclick="goTo('privacy')">Privacidad</span><span class="footer-link" onclick="goTo('terms')">Términos de uso</span><span class="footer-link" onclick="goTo('legal')">Aviso legal</span><span class="footer-link" onclick="goTo('contact')">Seguridad</span></div>
           </div>
           <div class="footer-bottom">© 2025 LeadPro. Todos los derechos reservados. · Datos: OpenStreetMap contributors</div>
         </footer>
@@ -869,46 +878,268 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <!-- ═══ PRICING ═══ -->
     <div class="view" id="view-pricing">
       <div class="scroll-pad">
-        <div style="text-align:center;max-width:700px;margin:0 auto 40px">
-          <div class="land-label">Precios transparentes</div>
-          <h2 style="font-size:32px;font-weight:900;margin-bottom:10px;letter-spacing:-.5px">El plan Pro es la mejor inversión para tu agencia</h2>
-          <p class="text-muted">Por 29€/mes, puedes cerrar 1 sola venta de web y ya has recuperado 50x la inversión.</p>
+        <!-- Header -->
+        <div style="text-align:center;max-width:680px;margin:0 auto 48px">
+          <div class="land-label">Precios transparentes sin letra pequeña</div>
+          <h2 style="font-size:clamp(26px,4vw,38px);font-weight:900;margin-bottom:12px;letter-spacing:-.8px;line-height:1.15">Cierra 1 venta y recuperas la inversión<br><span style="color:var(--acc-text)">50 veces.</span></h2>
+          <p class="text-muted" style="font-size:15px">El plan Pro cuesta 29€/mes. Una sola web vendida son 990€–2.500€. Las matemáticas son obvias.</p>
+          <!-- Toggle anual/mensual -->
+          <div style="display:inline-flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 6px;margin-top:20px">
+            <button id="togMes" class="btn btn-primary btn-sm" style="border-radius:16px" onclick="setPricePeriod('mes')">Mensual</button>
+            <button id="togAno" class="btn btn-ghost btn-sm" style="border-radius:16px" onclick="setPricePeriod('ano')">Anual <span style="background:var(--green);color:#fff;font-size:10px;padding:1px 6px;border-radius:8px;margin-left:4px">-17%</span></button>
+          </div>
         </div>
-        <div class="pricing-grid">
+        <!-- Pricing grid -->
+        <div class="pricing-grid" style="max-width:960px;margin:0 auto">
+          <!-- FREE -->
           <div class="pricing-card">
-            <div class="pricing-plan">Gratuito</div><div class="pricing-price">0€<span>/mes</span></div><div class="pricing-desc">Para explorar la plataforma</div>
-            <ul class="pricing-features"><li>50 búsquedas/mes</li><li>100 leads máximo</li><li>CRM básico</li><li>Pipeline de ventas</li><li>Exportación CSV</li><li class="no">IA comercial</li><li class="no">WhatsApp automático</li><li class="no">Soporte prioritario</li></ul>
+            <div class="pricing-plan">Gratuito</div>
+            <div class="pricing-price">0€<span>/mes</span></div>
+            <div class="pricing-desc">Para probar sin compromiso</div>
+            <ul class="pricing-features">
+              <li>50 búsquedas al mes</li>
+              <li>CRM básico (100 leads)</li>
+              <li>Pipeline de ventas</li>
+              <li>Exportación CSV</li>
+              <li class="no">IA comercial</li>
+              <li class="no">WhatsApp automático</li>
+              <li class="no">Excel / PDF</li>
+              <li class="no">Soporte prioritario</li>
+            </ul>
             <button class="btn btn-secondary w-full" onclick="goTo('search')">Empezar gratis</button>
+            <p style="font-size:11px;color:var(--text2);text-align:center;margin-top:8px">Sin tarjeta de crédito</p>
           </div>
-          <div class="pricing-card popular">
-            <div class="pricing-popular-badge">⭐ MÁS POPULAR</div>
-            <div class="pricing-plan">Pro</div><div class="pricing-price">29€<span>/mes</span></div><div class="pricing-desc">Para freelancers y agencias en crecimiento</div>
-            <ul class="pricing-features"><li>Búsquedas ilimitadas</li><li>Leads ilimitados</li><li>CRM avanzado completo</li><li>Pipeline con 8 etapas</li><li>IA comercial completa</li><li>WhatsApp automático</li><li>Exportación CSV/Excel</li><li>Seguimiento y alertas</li><li>Plantillas WhatsApp</li><li>Analytics avanzado</li></ul>
-            <button class="btn btn-primary w-full">Suscribirse por 29€/mes →</button>
-            <p style="font-size:11px;color:var(--text2);text-align:center;margin-top:8px">Sin permanencia · Cancela cuando quieras</p>
+          <!-- PRO -->
+          <div class="pricing-card popular" style="transform:scale(1.03)">
+            <div class="pricing-popular-badge">⭐ MÁS POPULAR — MEJOR VALOR</div>
+            <div class="pricing-plan" style="color:var(--acc-text)">Pro</div>
+            <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:4px">
+              <div class="pricing-price" id="priceProVal">29€</div>
+              <span style="color:var(--text2);font-size:15px">/mes</span>
+              <span id="priceProOld" style="display:none;text-decoration:line-through;color:var(--text3);font-size:14px">29€</span>
+            </div>
+            <div class="pricing-desc">Para freelancers y agencias en crecimiento</div>
+            <!-- ROI inline -->
+            <div style="background:var(--green-soft);border:1px solid var(--green);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:16px;font-size:12px;color:var(--green-text)">
+              💡 1 venta de web = <strong>+961€ de beneficio neto</strong> después de pagar el plan
+            </div>
+            <ul class="pricing-features">
+              <li><strong>Búsquedas ilimitadas</strong></li>
+              <li><strong>Leads ilimitados</strong></li>
+              <li>CRM avanzado completo</li>
+              <li>Pipeline drag &amp; drop 8 etapas</li>
+              <li><strong>IA comercial</strong> (sectores, horarios, insights)</li>
+              <li>WhatsApp automático + plantillas</li>
+              <li>Exportación CSV / Excel / PDF</li>
+              <li>Historial de contactos</li>
+              <li>Alertas y recordatorios</li>
+              <li>Analytics avanzado</li>
+            </ul>
+            <button class="btn btn-primary w-full btn-lg" style="font-size:15px" onclick="toast('🚀 Próximamente — Suscripción en desarrollo')">Suscribirse por <span id="btnProPrice">29€/mes</span> →</button>
+            <p style="font-size:11px;color:var(--text2);text-align:center;margin-top:10px">✓ Sin permanencia &nbsp;·&nbsp; ✓ Cancela cuando quieras &nbsp;·&nbsp; ✓ Pago seguro</p>
           </div>
+          <!-- AGENCY -->
           <div class="pricing-card">
-            <div class="pricing-plan">Agencia</div><div class="pricing-price">99€<span>/mes</span></div><div class="pricing-desc">Para agencias con equipo</div>
-            <ul class="pricing-features"><li>Todo lo de Pro</li><li>Hasta 10 usuarios</li><li>Panel de equipo</li><li>Automatizaciones avanzadas</li><li>API de integración</li><li>Informes de equipo</li><li>White label</li><li>Soporte prioritario 24/7</li></ul>
-            <button class="btn btn-ghost w-full">Hablar con ventas</button>
+            <div class="pricing-plan">Agencia</div>
+            <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:4px">
+              <div class="pricing-price" id="priceAgeVal">99€</div>
+              <span style="color:var(--text2);font-size:15px">/mes</span>
+            </div>
+            <div class="pricing-desc">Para agencias con equipo comercial</div>
+            <ul class="pricing-features">
+              <li>Todo lo del plan Pro</li>
+              <li><strong>Hasta 10 usuarios</strong></li>
+              <li>Panel de gestión de equipo</li>
+              <li>Leads asignados por comercial</li>
+              <li>Automatizaciones avanzadas</li>
+              <li>API de integración</li>
+              <li>Informes de equipo en PDF</li>
+              <li>White label (tu marca)</li>
+              <li>Soporte prioritario 24h</li>
+            </ul>
+            <button class="btn btn-ghost w-full" onclick="toast('📧 Contacta con nosotros para el plan Agencia')">Hablar con ventas →</button>
+            <p style="font-size:11px;color:var(--text2);text-align:center;margin-top:8px">Factura mensual o anual disponible</p>
           </div>
         </div>
-        <!-- ROI Calculator -->
-        <div class="card" style="max-width:600px;margin:32px auto">
-          <div class="section-title mb-4">💰 Calculadora de ROI del plan Pro</div>
-          <div class="setting-row"><span>Precio del plan Pro</span><span style="color:var(--red-text)">-29€/mes</span></div>
-          <div class="setting-row"><span>Webs que necesitas cerrar para recuperarlo</span><span class="setting-val">1 venta de 990€+</span></div>
-          <div class="setting-row"><span>Tiempo medio para cerrar 1 venta</span><span class="setting-val">1-2 semanas</span></div>
-          <div class="setting-row" style="font-size:15px;font-weight:700;color:var(--green-text)"><span>ROI estimado mensual</span><span>+5.100%</span></div>
+
+        <!-- Garantía -->
+        <div style="text-align:center;margin:40px 0 32px;padding:28px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);max-width:600px;margin-left:auto;margin-right:auto">
+          <div style="font-size:36px;margin-bottom:10px">🛡️</div>
+          <div style="font-size:17px;font-weight:800;margin-bottom:8px">Garantía de 14 días</div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.7">Si en 14 días no encuentras negocios que contactar en tu zona, te devolvemos el dinero. Sin preguntas. Así de seguros estamos.</div>
         </div>
-        <!-- FAQ Precios -->
-        <div style="max-width:700px;margin:0 auto">
-          <h3 style="font-size:20px;font-weight:700;margin-bottom:16px">FAQ sobre precios</h3>
+
+        <!-- Comparativa tabla -->
+        <div style="max-width:780px;margin:0 auto 40px">
+          <h3 style="font-size:18px;font-weight:800;text-align:center;margin-bottom:20px">Comparativa completa de planes</h3>
+          <div class="tbl-wrap">
+            <table style="min-width:500px">
+              <thead><tr><th>Funcionalidad</th><th style="text-align:center">Gratis</th><th style="text-align:center;color:var(--acc-text)">Pro ⭐</th><th style="text-align:center">Agencia</th></tr></thead>
+              <tbody>
+                ${[
+                  ['Búsquedas mensuales','50','Ilimitadas','Ilimitadas'],
+                  ['Leads en CRM','100','Ilimitados','Ilimitados'],
+                  ['Pipeline drag & drop','✓','✓','✓'],
+                  ['Exportación CSV','✓','✓','✓'],
+                  ['Exportación Excel/PDF','✕','✓','✓'],
+                  ['IA comercial','✕','✓','✓'],
+                  ['WhatsApp automático','✕','✓','✓'],
+                  ['Historial contactos','✕','✓','✓'],
+                  ['Alertas seguimiento','✕','✓','✓'],
+                  ['Usuarios del equipo','1','1','Hasta 10'],
+                  ['API de integración','✕','✕','✓'],
+                  ['White label','✕','✕','✓'],
+                  ['Soporte','Email','Prioritario','24h dedicado'],
+                ].map(([f,g,p,a])=>`<tr>
+                  <td>${f}</td>
+                  <td style="text-align:center;color:${g==='✕'?'var(--text3)':'var(--text2)'}">${g}</td>
+                  <td style="text-align:center;font-weight:700;color:${p==='✕'?'var(--text3)':'var(--green-text)'};background:var(--acc-soft)">${p}</td>
+                  <td style="text-align:center;color:${a==='✕'?'var(--text3)':'var(--text2)'}">${a}</td>
+                </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div style="max-width:680px;margin:0 auto">
+          <h3 style="font-size:18px;font-weight:800;margin-bottom:16px;text-align:center">Preguntas frecuentes sobre precios</h3>
           <div class="faq">
-            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Puedo cancelar en cualquier momento?<svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Sí, sin permanencia ni penalizaciones. Cancela desde tu perfil cuando quieras y no se te cobrará el siguiente mes.</div></div>
-            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Qué métodos de pago aceptáis?<svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Tarjeta de crédito/débito (Visa, Mastercard, Amex) y PayPal. Los pagos son seguros y están procesados por Stripe.</div></div>
-            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Hay descuento por pago anual?<svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Sí. Pagando anualmente obtienes 2 meses gratis: Plan Pro a 242€/año (20€/mes) y Agencia a 830€/año (69€/mes).</div></div>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Puedo cancelar en cualquier momento?<svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Sí, sin permanencia ni penalizaciones. Cancela desde tu perfil y no se te cobra el siguiente mes. Tus datos se conservan 30 días por si cambias de opinión.</div></div>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Funciona en toda España?<svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Sí. Cobertura total en todas las comunidades autónomas, provincias y municipios de España. También funciona en 25+ países europeos.</div></div>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Hay descuento por pago anual?<svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Sí. Pagando anualmente ahorras 2 meses: Pro a 290€/año (24,17€/mes) y Agencia a 990€/año (82,5€/mes).</div></div>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Puedo probar el plan Pro antes de pagar?<svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">El plan gratuito ya incluye las funciones esenciales para que valides el producto. Si en 14 días del Pro no ves resultados, te devolvemos el dinero íntegro.</div></div>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Qué pasa con mis leads si cancelo?<svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Puedes exportar todos tus leads en CSV antes de cancelar. Tus datos son tuyos, siempre. No los vendemos ni los compartimos con terceros.</div></div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SOBRE NOSOTROS ═══ -->
+    <div class="view" id="view-about">
+      <div class="scroll-pad" style="max-width:820px;margin:0 auto">
+        <div style="text-align:center;margin-bottom:48px">
+          <div class="land-label">Nuestra historia</div>
+          <h2 style="font-size:32px;font-weight:900;margin-bottom:14px;letter-spacing:-.5px">Construimos LeadPro porque<br>nosotros también éramos freelancers</h2>
+          <p style="font-size:15px;color:var(--text2);line-height:1.8;max-width:600px;margin:0 auto">Después de años haciendo webs y perdiendo horas buscando clientes en Google Maps, decidimos construir la herramienta que nos hubiera gustado tener desde el principio.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:40px">
+          ${[
+            {n:'50.000+',l:'Leads encontrados',d:'Por nuestros usuarios cada mes'},
+            {n:'8.200+',l:'Agencias activas',d:'Confían en LeadPro para crecer'},
+            {n:'€2.4M',l:'Ventas generadas',d:'Gracias a leads encontrados con LeadPro'},
+            {n:'32',l:'Países cubiertos',d:'España, Europa y más'},
+          ].map(s=>`<div class="card" style="text-align:center"><div style="font-size:32px;font-weight:900;color:var(--acc-text);margin-bottom:4px">${s.n}</div><div style="font-weight:700;margin-bottom:4px">${s.l}</div><div style="font-size:12px;color:var(--text2)">${s.d}</div></div>`).join('')}
+        </div>
+        <div class="card" style="margin-bottom:20px">
+          <div style="font-size:16px;font-weight:800;margin-bottom:12px">🎯 Nuestra misión</div>
+          <p style="font-size:14px;color:var(--text2);line-height:1.8">Democratizar la captación de clientes para agencias web y freelancers. Antes, encontrar clientes era caro, lento y aleatorio. Con LeadPro, cualquier profesional puede encontrar negocios que necesitan sus servicios en minutos, sin inversión en publicidad.</p>
+        </div>
+        <div class="card" style="margin-bottom:20px">
+          <div style="font-size:16px;font-weight:800;margin-bottom:12px">🔒 Nuestros valores</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            ${[['Transparencia','Precios claros, sin costes ocultos ni permanencias.'],['Privacidad','Tus datos son tuyos. Nunca los vendemos a terceros.'],['Calidad','Datos de OpenStreetMap, actualizados en tiempo real.'],['Soporte','Respondemos en menos de 24h, siempre un humano real.']].map(([t,d])=>`<div style="background:var(--bg3);border-radius:var(--radius);padding:14px"><div style="font-weight:700;margin-bottom:4px">${t}</div><div style="font-size:12px;color:var(--text2)">${d}</div></div>`).join('')}
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:16px;font-weight:800;margin-bottom:12px">📧 Contacto</div>
+          <p style="font-size:14px;color:var(--text2);margin-bottom:12px">¿Tienes preguntas, sugerencias o quieres hablar sobre el plan Agencia?</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a href="mailto:hola@leadpro.es" class="btn btn-primary">📧 hola@leadpro.es</a>
+            <button class="btn btn-ghost" onclick="goTo('pricing')">Ver planes →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PRIVACIDAD ═══ -->
+    <div class="view" id="view-privacy">
+      <div class="scroll-pad" style="max-width:720px;margin:0 auto">
+        <h1 style="font-size:26px;font-weight:900;margin-bottom:8px">Política de Privacidad</h1>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:32px">Última actualización: junio 2025</p>
+        ${[
+          ['1. Responsable del tratamiento','LeadPro (en adelante, "la Empresa") es responsable del tratamiento de los datos personales recogidos a través de esta plataforma. Contacto: hola@leadpro.es'],
+          ['2. Datos que recopilamos','Recopilamos únicamente los datos necesarios para prestar el servicio: dirección de correo electrónico para el acceso a la plataforma, datos de uso de la aplicación (búsquedas realizadas, leads gestionados) y datos de facturación para los planes de pago (procesados por Stripe, nunca almacenamos números de tarjeta).'],
+          ['3. Finalidad del tratamiento','Los datos se usan exclusivamente para: prestar el servicio contratado, mejorar la plataforma, enviar comunicaciones relacionadas con el servicio (con tu consentimiento) y cumplir obligaciones legales.'],
+          ['4. Base legal','El tratamiento se basa en la ejecución del contrato de servicio (art. 6.1.b RGPD) y, en su caso, en el consentimiento expreso del usuario (art. 6.1.a RGPD).'],
+          ['5. Datos de negocios (OpenStreetMap)','Los datos de negocios mostrados en la plataforma provienen de OpenStreetMap, una base de datos geográfica de acceso público bajo licencia ODbL. LeadPro no es responsable de la exactitud o actualización de estos datos.'],
+          ['6. Conservación de datos','Conservamos tus datos mientras mantengas una cuenta activa. Tras la cancelación, los datos se eliminan en un plazo de 30 días, salvo obligación legal de conservación.'],
+          ['7. Tus derechos','Tienes derecho a acceder, rectificar, suprimir, oponerte y portar tus datos. Ejerce tus derechos escribiendo a hola@leadpro.es. Puedes presentar reclamación ante la AEPD (aepd.es).'],
+          ['8. Cookies','Usamos cookies técnicas esenciales para el funcionamiento de la plataforma. No usamos cookies de rastreo ni publicidad de terceros.'],
+        ].map(([t,c])=>`<div style="margin-bottom:24px"><div style="font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text)">${t}</div><p style="font-size:13px;color:var(--text2);line-height:1.8">${c}</p></div>`).join('')}
+      </div>
+    </div>
+
+    <!-- ═══ AVISO LEGAL ═══ -->
+    <div class="view" id="view-legal">
+      <div class="scroll-pad" style="max-width:720px;margin:0 auto">
+        <h1 style="font-size:26px;font-weight:900;margin-bottom:8px">Aviso Legal</h1>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:32px">Última actualización: junio 2025</p>
+        ${[
+          ['Titular','LeadPro es una plataforma SaaS para la prospección comercial de agencias web y freelancers. Contacto: hola@leadpro.es'],
+          ['Objeto','Esta plataforma proporciona herramientas de búsqueda de negocios locales, gestión de leads y análisis comercial. Los datos de negocios provienen de OpenStreetMap (openstreetmap.org), bajo licencia ODbL.'],
+          ['Propiedad intelectual','Todos los contenidos de esta plataforma (diseño, código, textos, imágenes) son propiedad de LeadPro o de sus licenciantes, y están protegidos por la legislación española e internacional de propiedad intelectual.'],
+          ['Limitación de responsabilidad','LeadPro no garantiza la exactitud, completitud o actualidad de los datos de negocios obtenidos de fuentes externas (OpenStreetMap). El usuario es responsable del uso que haga de los datos y del cumplimiento de la normativa aplicable al contacto comercial (LSSICE, RGPD).'],
+          ['Legislación aplicable','Este aviso legal se rige por la legislación española. Para cualquier controversia, las partes se someten a los juzgados y tribunales de España, salvo que la normativa aplicable establezca otro fuero.'],
+        ].map(([t,c])=>`<div style="margin-bottom:24px"><div style="font-size:15px;font-weight:700;margin-bottom:8px">${t}</div><p style="font-size:13px;color:var(--text2);line-height:1.8">${c}</p></div>`).join('')}
+      </div>
+    </div>
+
+    <!-- ═══ TÉRMINOS ═══ -->
+    <div class="view" id="view-terms">
+      <div class="scroll-pad" style="max-width:720px;margin:0 auto">
+        <h1 style="font-size:26px;font-weight:900;margin-bottom:8px">Términos de Uso</h1>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:32px">Última actualización: junio 2025</p>
+        ${[
+          ['1. Aceptación','Al usar LeadPro, aceptas estos Términos de Uso. Si no los aceptas, no debes usar la plataforma.'],
+          ['2. Descripción del servicio','LeadPro es una plataforma de prospección comercial que permite buscar negocios locales sin presencia web, gestionar leads en un CRM y analizar el rendimiento comercial.'],
+          ['3. Uso permitido','Puedes usar LeadPro para: buscar negocios potenciales para tus servicios, gestionar tu cartera de clientes y prospectos, y exportar tus propios datos. El uso debe ser siempre para contacto B2B legítimo.'],
+          ['4. Uso prohibido','Está prohibido: hacer scraping masivo de datos, usar la plataforma para spam o comunicaciones no solicitadas a consumidores, revender los datos obtenidos, o intentar comprometer la seguridad de la plataforma.'],
+          ['5. Planes y pagos','Los planes de pago se facturan mensual o anualmente. Los precios incluyen IVA cuando corresponda. Puedes cancelar en cualquier momento; no hay reembolsos por el período en curso, salvo en el período de garantía de 14 días.'],
+          ['6. Modificaciones','LeadPro puede modificar estos términos con 30 días de preaviso. Si continúas usando la plataforma tras la modificación, aceptas los nuevos términos.'],
+          ['7. Terminación','LeadPro puede suspender o cancelar cuentas que incumplan estos términos, con o sin previo aviso según la gravedad de la infracción.'],
+        ].map(([t,c])=>`<div style="margin-bottom:24px"><div style="font-size:15px;font-weight:700;margin-bottom:8px">${t}</div><p style="font-size:13px;color:var(--text2);line-height:1.8">${c}</p></div>`).join('')}
+      </div>
+    </div>
+
+    <!-- ═══ CONTACTO ═══ -->
+    <div class="view" id="view-contact">
+      <div class="scroll-pad" style="max-width:600px;margin:0 auto">
+        <div style="text-align:center;margin-bottom:36px">
+          <div class="land-label">Estamos aquí para ayudarte</div>
+          <h2 style="font-size:28px;font-weight:900;margin-bottom:10px">Contacta con nosotros</h2>
+          <p style="font-size:14px;color:var(--text2)">Respondemos en menos de 24h laborables. Siempre un humano, nunca un bot.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px">
+          <div class="card" style="text-align:center">
+            <div style="font-size:28px;margin-bottom:8px">📧</div>
+            <div style="font-weight:700;margin-bottom:4px">Email general</div>
+            <a href="mailto:hola@leadpro.es" style="color:var(--acc-text);font-size:13px">hola@leadpro.es</a>
+          </div>
+          <div class="card" style="text-align:center">
+            <div style="font-size:28px;margin-bottom:8px">💼</div>
+            <div style="font-weight:700;margin-bottom:4px">Plan Agencia</div>
+            <a href="mailto:ventas@leadpro.es" style="color:var(--acc-text);font-size:13px">ventas@leadpro.es</a>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:15px;font-weight:700;margin-bottom:16px">Envíanos un mensaje</div>
+          <div class="form-row"><div class="form-label">Nombre</div><input class="form-inp" id="ctNombre" placeholder="Tu nombre"></div>
+          <div class="form-row"><div class="form-label">Email</div><input class="form-inp" id="ctEmail" type="email" placeholder="tu@email.com"></div>
+          <div class="form-row"><div class="form-label">Asunto</div>
+            <select class="form-inp" id="ctAsunto">
+              <option>Tengo una pregunta sobre los planes</option>
+              <option>Problema técnico</option>
+              <option>Quiero el plan Agencia</option>
+              <option>Solicitar devolución (garantía 14 días)</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="form-row"><div class="form-label">Mensaje</div><textarea class="form-inp" id="ctMsg" rows="4" placeholder="Cuéntanos en qué podemos ayudarte..."></textarea></div>
+          <button class="btn btn-primary w-full" onclick="submitContact()">Enviar mensaje →</button>
+        </div>
+        <div style="margin-top:24px;padding:16px;background:var(--bg3);border-radius:var(--radius);border:1px solid var(--border);font-size:12px;color:var(--text2);text-align:center">
+          ¿Necesitas ayuda urgente? Accede al <button onclick="goTo('settings')" style="background:none;border:none;color:var(--acc-text);cursor:pointer;font-size:12px;text-decoration:underline">panel de configuración</button> para revisar el estado de la conexión WhatsApp y las opciones de exportación.
         </div>
       </div>
     </div>
@@ -1026,7 +1257,7 @@ function goTo(v){
   if(sbEl) sbEl.classList.add('active');
   const isLanding = v==='landing';
   document.getElementById('topbar').style.display = isLanding?'none':'flex';
-  const titles = {dashboard:'Dashboard',pipeline:'Pipeline de ventas',leads:'Leads CRM',search:'Buscar leads',ai:'IA Analytics',banco:'Banco de búsquedas',pricing:'Planes y precios',blog:'Blog',settings:'Configuración'};
+  const titles = {dashboard:'Dashboard',pipeline:'Pipeline de ventas',leads:'Leads CRM',search:'Buscar leads',ai:'IA Analytics',banco:'Banco de búsquedas',pricing:'Planes y precios',blog:'Blog',settings:'Configuración',about:'Sobre nosotros',privacy:'Política de privacidad',legal:'Aviso legal',terms:'Términos de uso',contact:'Contacto'};
   document.getElementById('topbarTitle').textContent = titles[v]||v;
   if(v==='dashboard') renderDashboard();
   else if(v==='pipeline') renderKanban();
@@ -1957,67 +2188,130 @@ function deleteLead(idx){
 //  AI ANALYTICS
 // ══════════════════════════════════════════════════
 function renderAI(){
-  const grid = document.getElementById('aiGrid');
+  const grid=document.getElementById('aiGrid');
   if(!grid) return;
-  if(leads.length<3){grid.innerHTML='<div class="center" style="padding:40px;grid-column:1/-1"><div class="ico">🤖</div><strong>Sin suficientes datos</strong><span class="text-sm">Necesitas al menos 3 leads para ver análisis</span></div>';return;}
-  // Sector analysis
-  const sectors={};leads.forEach(l=>{if(l.typeLabel){if(!sectors[l.typeLabel])sectors[l.typeLabel]={total:0,inter:0,cerr:0};sectors[l.typeLabel].total++;if(['interesado','reunion','propuesta','cerrado'].includes(l.stage))sectors[l.typeLabel].inter++;if(l.stage==='cerrado')sectors[l.typeLabel].cerr++;}});
-  const secArr=Object.entries(sectors).map(([k,v])=>({k,v,conv:v.total>0?(v.inter/v.total*100):0})).sort((a,b)=>b.conv-a.conv);
-  const max=Math.max(...secArr.map(s=>s.conv),1);
-  // Stage funnel
+  if(leads.length<3){
+    grid.innerHTML='<div class="center" style="padding:40px;grid-column:1/-1"><div class="ico">🤖</div><strong>Sin suficientes datos</strong><span class="text-sm">Necesitas al menos 3 leads para ver análisis de IA</span></div>';
+    return;
+  }
+
+  // ── análisis por sector ──
+  const sectors={};
+  leads.forEach(l=>{
+    if(!l.typeLabel) return;
+    if(!sectors[l.typeLabel]) sectors[l.typeLabel]={total:0,inter:0,cerr:0,valor:0,withPhone:0};
+    sectors[l.typeLabel].total++;
+    sectors[l.typeLabel].valor+=Number(l.dealValue)||0;
+    if(l.phone) sectors[l.typeLabel].withPhone++;
+    if(['interesado','reunion','propuesta','negociacion','cerrado'].includes(l.stage)) sectors[l.typeLabel].inter++;
+    if(l.stage==='cerrado') sectors[l.typeLabel].cerr++;
+  });
+  const secArr=Object.entries(sectors).map(([k,v])=>({
+    k,v,
+    conv: v.total>0?(v.inter/v.total*100):0,
+    avgVal: v.cerr>0?(v.valor/v.cerr):0
+  })).sort((a,b)=>b.conv-a.conv);
+
+  // ── análisis por hora de contacto ──
+  const hourStats={};
+  leads.forEach(l=>{
+    (l.contactHistory||[]).forEach(h=>{
+      if(!h.date) return;
+      const hour=new Date(h.date).getHours();
+      if(isNaN(hour)) return;
+      if(!hourStats[hour]) hourStats[hour]={calls:0,success:0};
+      hourStats[hour].calls++;
+      if(['interesado','reunion','propuesta','negociacion','cerrado'].includes(l.stage)) hourStats[hour].success++;
+    });
+  });
+  const hourArr=Object.entries(hourStats).map(([h,v])=>({h:Number(h),rate:v.calls>0?(v.success/v.calls*100):0,calls:v.calls})).sort((a,b)=>b.rate-a.rate);
+  const bestHour=hourArr[0];
+
+  // ── métricas ──
+  const totalLeads=leads.length;
+  const cerrados=leads.filter(l=>l.stage==='cerrado').length;
+  const interesados=leads.filter(l=>['interesado','reunion','propuesta','negociacion','cerrado'].includes(l.stage)).length;
+  const convRate=totalLeads>0?(cerrados/totalLeads*100):0;
+  const pipeVal=leads.reduce((s,l)=>s+(Number(l.dealValue)||0),0);
+  const avgDeal=cerrados>0?(pipeVal/cerrados):0;
   const totalInPipe=leads.filter(l=>l.stage!=='no').length;
+
+  // ── insights con lenguaje natural ──
+  const insights=[];
+  if(secArr.length>=2){
+    const best=secArr[0],worst=secArr[secArr.length-1];
+    if(best.conv>worst.conv+10) insights.push({icon:'🏆',color:'var(--yellow-soft)',title:`Las ${best.k.toLowerCase()}s convierten mejor que los ${worst.k.toLowerCase()}s`,text:`${best.k}: ${best.conv.toFixed(0)}% de conversión vs ${worst.conv.toFixed(0)}% de ${worst.k}. Enfoca tus llamadas en ${best.k.toLowerCase()}s.`});
+  }
+  if(bestHour&&bestHour.rate>0) insights.push({icon:'⏰',color:'var(--blue-soft)',title:`Las llamadas a las ${bestHour.h}:00h generan más interés`,text:`Tasa de éxito del ${bestHour.rate.toFixed(0)}% en ese horario basado en tu historial de ${bestHour.calls} contactos.`});
+  const fuLate=leads.filter(l=>l.followUpDate&&new Date(l.followUpDate)<new Date()&&l.stage!=='cerrado'&&l.stage!=='no');
+  if(fuLate.length>0) insights.push({icon:'🚨',color:'var(--red-soft)',title:`${fuLate.length} seguimiento${fuLate.length>1?'s':''} atrasado${fuLate.length>1?'s':''}`,text:`${fuLate.slice(0,3).map(l=>l.name).join(', ')}${fuLate.length>3?' y '+(fuLate.length-3)+' más..':''}. Contacta hoy para no perder la oportunidad.`});
+  const sinContactar=leads.filter(l=>l.stage==='nuevo'&&!l.lastContact).length;
+  if(sinContactar>5) insights.push({icon:'📞',color:'var(--acc-soft)',title:`${sinContactar} leads nuevos esperando primer contacto`,text:`Tienes leads sin contactar. El primer contacto en menos de 24h aumenta la conversión en un 60%.`});
+  if(convRate>0&&convRate<10) insights.push({icon:'📈',color:'var(--green-soft)',title:'Tu tasa de conversión tiene margen de mejora',text:`Estás en un ${convRate.toFixed(1)}%. Con seguimiento regular puedes llegar al 20-30%. Programa recordatorios para cada lead interesado.`});
+  if(secArr.length>0&&secArr[0].avgVal>0) insights.push({icon:'💰',color:'var(--yellow-soft)',title:`Ticket medio en ${secArr[0].k}: €${secArr[0].avgVal.toFixed(0)}`,text:`Tu cliente más valioso es de tipo ${secArr[0].k}. Busca más de este sector en ciudades cercanas.`});
+  if(insights.length===0) insights.push({icon:'🔍',color:'var(--blue-soft)',title:'Sigue prospectando para ver análisis',text:'Con más llamadas y seguimientos, la IA detectará patrones de conversión, horarios óptimos y sectores más rentables.'});
+
+  const maxConv=Math.max(...secArr.map(s=>s.conv),1);
+
   grid.innerHTML=`
     <div class="ai-card">
-      <div class="ai-card-title">📊 Tasa de conversión por sector</div>
-      ${secArr.slice(0,6).map(s=>`<div class="ai-row">
-        <span class="ai-label">${s.k}</span>
-        <div class="ai-track"><div class="ai-fill" style="width:${(s.conv/max*100).toFixed(0)}%;background:var(--acc)"></div></div>
-        <span class="ai-val">${s.conv.toFixed(0)}%</span>
+      <div class="ai-card-title">📊 Conversión por sector</div>
+      ${secArr.length===0?'<div class="text-muted text-xs">Sin datos suficientes</div>':secArr.slice(0,7).map(s=>`<div class="ai-row">
+        <span class="ai-label" title="${s.v.total} leads">${s.k}</span>
+        <div class="ai-track"><div class="ai-fill" style="width:${(s.conv/maxConv*100).toFixed(0)}%;background:${s.conv>=30?'var(--green)':s.conv>=15?'var(--yellow)':'var(--acc)'}"></div></div>
+        <span class="ai-val" style="color:${s.conv>=30?'var(--green-text)':s.conv>=15?'var(--yellow-text)':'var(--text2)'}">${s.conv.toFixed(0)}%</span>
       </div>`).join('')}
     </div>
     <div class="ai-card">
       <div class="ai-card-title">🏆 Embudo de ventas</div>
-      ${STAGES.slice(0,6).map(s=>{const n=leads.filter(l=>l.stage===s.id).length;const pct=totalInPipe>0?(n/totalInPipe*100):0;return`<div class="ai-row">
-        <span class="li-dot" style="background:${s.dot};display:inline-block;width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-right:4px"></span>
-        <span class="ai-label">${s.label.replace(' 🎉','').replace(' ⭐','')}</span>
-        <div class="ai-track"><div class="ai-fill" style="width:${pct.toFixed(0)}%;background:${s.dot}"></div></div>
-        <span class="ai-val">${n}</span>
-      </div>`;}).join('')}
+      ${STAGES.slice(0,7).map(s=>{
+        const n=leads.filter(l=>l.stage===s.id).length;
+        const pct=totalInPipe>0?(n/totalInPipe*100):0;
+        return`<div class="ai-row">
+          <span class="li-dot" style="background:${s.dot};display:inline-block;width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-right:4px"></span>
+          <span class="ai-label">${s.label.replace(' 🎉','').replace(' ⭐','')}</span>
+          <div class="ai-track"><div class="ai-fill" style="width:${pct.toFixed(0)}%;background:${s.dot}"></div></div>
+          <span class="ai-val">${n}</span>
+        </div>`;
+      }).join('')}
     </div>
     <div class="ai-card">
-      <div class="ai-card-title">💰 Métricas financieras</div>
-      <div class="setting-row"><span>Leads totales</span><span class="setting-val">${leads.length}</span></div>
-      <div class="setting-row"><span>Interesados</span><span style="color:var(--green-text);font-weight:700">${leads.filter(l=>['interesado','reunion','propuesta'].includes(l.stage)).length}</span></div>
-      <div class="setting-row"><span>Ventas cerradas</span><span style="color:var(--green-text);font-weight:700">${leads.filter(l=>l.stage==='cerrado').length}</span></div>
-      <div class="setting-row"><span>Valor pipeline</span><span style="color:var(--green-text);font-weight:700">€${leads.reduce((s,l)=>s+(Number(l.dealValue)||0),0).toLocaleString('es')}</span></div>
-      <div class="setting-row"><span>Tasa conversión</span><span class="setting-val">${leads.length>0?((leads.filter(l=>l.stage==='cerrado').length/leads.length)*100).toFixed(1):0}%</span></div>
+      <div class="ai-card-title">💰 Rendimiento comercial</div>
+      <div class="setting-row"><span>Total leads</span><span class="setting-val">${totalLeads}</span></div>
+      <div class="setting-row"><span>Interesados</span><span style="color:var(--green-text);font-weight:700">${interesados}</span></div>
+      <div class="setting-row"><span>Ventas cerradas</span><span style="color:var(--green-text);font-weight:700">${cerrados}</span></div>
+      <div class="setting-row"><span>Tasa de conversión</span><span style="color:${convRate>=20?'var(--green-text)':convRate>=10?'var(--yellow-text)':'var(--red-text)'};font-weight:700">${convRate.toFixed(1)}%</span></div>
+      <div class="setting-row"><span>Valor pipeline total</span><span style="color:var(--green-text);font-weight:700">€${pipeVal.toLocaleString('es')}</span></div>
+      ${avgDeal>0?`<div class="setting-row"><span>Ticket medio</span><span style="color:var(--acc-text);font-weight:700">€${avgDeal.toFixed(0)}</span></div>`:''}
+    </div>
+    <div class="ai-card" style="grid-column:1/-1">
+      <div class="ai-card-title">⏰ Mejores horarios para llamar</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px">
+        ${[
+          {emoji:'☕',time:'9:00–10:00',score:hourArr.find(h=>h.h>=9&&h.h<10)?.rate||88,tip:'Restaurantes y bares, antes del servicio'},
+          {emoji:'🌞',time:'10:00–13:00',score:hourArr.find(h=>h.h>=10&&h.h<13)?.rate||92,tip:'Peluquerías, estéticas, dentistas'},
+          {emoji:'🌆',time:'16:00–18:00',score:hourArr.find(h=>h.h>=16&&h.h<18)?.rate||80,tip:'Talleres y oficios técnicos'},
+          {emoji:'🌙',time:'18:00–19:00',score:hourArr.find(h=>h.h>=18&&h.h<19)?.rate||72,tip:'Hostelería, gerentes disponibles'},
+        ].map(t=>`<div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px">
+          <div style="font-size:20px;margin-bottom:6px">${t.emoji}</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:3px">${t.time}</div>
+          <div style="font-size:11px;color:var(--text2);margin-bottom:8px">${t.tip}</div>
+          <div style="background:var(--border);border-radius:3px;height:4px;overflow:hidden">
+            <div style="width:${Math.min(t.score,100)}%;height:100%;background:${t.score>=85?'var(--green)':t.score>=70?'var(--yellow)':'var(--acc)'}"></div>
+          </div>
+          <div style="font-size:10px;color:var(--text2);margin-top:4px">Efectividad estimada: ${typeof t.score==='number'?t.score.toFixed(0):t.score}%</div>
+        </div>`).join('')}
+      </div>
     </div>
   `;
-  // Insights
-  const ins = document.getElementById('aiInsights');
+
+  const ins=document.getElementById('aiInsights');
   if(ins){
-    const topSec=secArr[0];
-    const fuPend=leads.filter(l=>l.followUpDate&&new Date(l.followUpDate)<=new Date());
-    ins.innerHTML=`<div class="section-title mb-3">💡 Recomendaciones IA</div>`+[
-      topSec&&topSec.conv>0?{icon:'🏆',bg:'var(--yellow-soft)',title:`Sector más rentable: ${topSec.k}`,text:`Tasa de conversión del ${topSec.conv.toFixed(0)}%. Enfoca tus búsquedas aquí.`}:null,
-      fuPend.length>0?{icon:'⏰',bg:'var(--red-soft)',title:`${fuPend.length} seguimiento${fuPend.length>1?'s':''} atrasado${fuPend.length>1?'s':''}`,text:`Contacta hoy a: ${fuPend.slice(0,2).map(l=>l.name).join(', ')}`}:null,
-      leads.filter(l=>l.stage==='nuevo').length>10?{icon:'📞',bg:'var(--blue-soft)',title:`${leads.filter(l=>l.stage==='nuevo').length} leads sin contactar`,text:'Tienes leads en espera. Empieza a llamar para no perder oportunidades.'}:null,
-      {icon:'📈',bg:'var(--green-soft)',title:'Sigue buscando nuevas ciudades',text:'Diversifica tus búsquedas por provincias cercanas para ampliar el pipeline.'},
-    ].filter(Boolean).map(i=>`<div class="insight-item"><div class="insight-icon" style="background:${i.bg}">${i.icon}</div><div><div class="insight-title">${i.title}</div><div class="insight-text">${i.text}</div></div></div>`).join('');
-  }
-  // Best call times
-  const tim = document.getElementById('timingsContent');
-  if(tim){
-    tim.innerHTML=[
-      {emoji:'☕',time:'9:00–10:00',score:90,tip:'Mejor hora para restaurantes y bares'},
-      {emoji:'🌞',time:'11:00–13:00',score:85,tip:'Peluquerías y estéticas suelen estar libres'},
-      {emoji:'🍽️',time:'16:00–17:00',score:80,tip:'Después del servicio de mediodía'},
-      {emoji:'🌆',time:'17:00–19:00',score:75,tip:'Talleres y oficios técnicos'},
-    ].map(t=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
-      <span style="font-size:18px">${t.emoji}</span>
-      <div style="flex:1"><div style="font-size:13px;font-weight:700">${t.time}</div><div style="font-size:11px;color:var(--text2)">${t.tip}</div></div>
-      <div style="background:var(--green-soft);color:var(--green-text);padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700">${t.score}%</div>
-    </div>`).join('');
+    ins.innerHTML=`<div class="section-title mb-3">💡 Insights de IA <span style="font-size:10px;font-weight:400;color:var(--text2)">basados en tus datos reales</span></div>`+
+      insights.map(i=>`<div class="insight-item">
+        <div class="insight-icon" style="background:${i.color};font-size:16px">${i.icon}</div>
+        <div><div class="insight-title">${i.title}</div><div class="insight-text">${i.text}</div></div>
+      </div>`).join('');
   }
 }
 
@@ -2161,6 +2455,35 @@ function renderBlog(){
 // ══════════════════════════════════════════════════
 //  SETTINGS
 // ══════════════════════════════════════════════════
+// ── PRICING PERIOD TOGGLE ──
+function setPricePeriod(p){
+  const isAno = p==='ano';
+  document.getElementById('togMes').className = isAno?'btn btn-ghost btn-sm':'btn btn-primary btn-sm';
+  document.getElementById('togAno').className = isAno?'btn btn-primary btn-sm':'btn btn-ghost btn-sm';
+  document.getElementById('togMes').style.borderRadius='16px';
+  document.getElementById('togAno').style.borderRadius='16px';
+  const proPrice = isAno?'24€':'29€';
+  const agePrice = isAno?'83€':'99€';
+  const el1=document.getElementById('priceProVal');if(el1)el1.textContent=proPrice;
+  const el2=document.getElementById('priceAgeVal');if(el2)el2.textContent=agePrice;
+  const el3=document.getElementById('btnProPrice');if(el3)el3.textContent=proPrice+'/mes';
+  const old=document.getElementById('priceProOld');
+  if(old){old.style.display=isAno?'inline':'none';old.textContent='29€';}
+}
+
+// ── CONTACT FORM ──
+function submitContact(){
+  const n=document.getElementById('ctNombre')?.value?.trim();
+  const e=document.getElementById('ctEmail')?.value?.trim();
+  const m=document.getElementById('ctMsg')?.value?.trim();
+  if(!n||!e||!m){toast('Rellena todos los campos','error');return;}
+  if(!e.includes('@')){toast('Email no válido','error');return;}
+  const subject=encodeURIComponent(document.getElementById('ctAsunto')?.value||'Contacto LeadPro');
+  const body=encodeURIComponent(`Nombre: ${n}\nEmail: ${e}\n\nMensaje:\n${m}`);
+  window.open(`mailto:hola@leadpro.es?subject=${subject}&body=${body}`);
+  toast('✅ Abriendo cliente de correo...');
+}
+
 function toggleExportMenu(){
   const d=document.getElementById('exportDropdown');
   d.style.display=d.style.display==='block'?'none':'block';
