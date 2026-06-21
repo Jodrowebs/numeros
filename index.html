@@ -1463,11 +1463,12 @@ async function geocodeNominatim(q){
 
 async function overpassQuery(lat,lon,tags,radius){
   const ar=`(around:${radius},${lat},${lon})`;
+  const nw='["website"!~"."]["contact:website"!~"."]';
   const tagFilters=tags.map(t=>
-    `node["amenity"="${t}"]["phone"]${ar};`+
-    `way["amenity"="${t}"]["phone"]${ar};`+
-    `node["shop"="${t}"]["phone"]${ar};`+
-    `way["shop"="${t}"]["phone"]${ar};`
+    `node["amenity"="${t}"]["phone"]${nw}${ar};`+
+    `way["amenity"="${t}"]["phone"]${nw}${ar};`+
+    `node["shop"="${t}"]["phone"]${nw}${ar};`+
+    `way["shop"="${t}"]["phone"]${nw}${ar};`
   ).join('');
   const q=`[out:json][timeout:25];(${tagFilters});out center 500;`;
   const body='data='+encodeURIComponent(q);
